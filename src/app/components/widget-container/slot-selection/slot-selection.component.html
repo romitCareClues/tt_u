@@ -20,12 +20,12 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_department-area">
                 <mat-label>{{displayLabel.date_selection}}</mat-label>
                 <mat-form-field>
-                    <button class="btn btn-date">
+                    <!--button class="btn btn-date">
                         <i class="glyphicon glyphicon-menu-left" aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-date">
                         <i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>
-                    </button>
+                    </button-->
                     <input class="date-field" matInput [matDatepicker]="picker"
                         [formControl]="appointmentDateSelectControl" (dateChange)="onAppointmentDateChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
