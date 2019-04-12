@@ -1,0 +1,39 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding gap-up">
+	<div *ngIf="displayOtpForm" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding-left CC_mob-numbers-area">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_mobile-number-header">
+			<h4>{{otpLabelTexts.header_title}}</h4>
+		</div>
+		<form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_call-to-book-form" [formGroup]="otpForm"
+			(ngSubmit)='onOtpFormSubmit()'>
+			<span class="widget-get-otp-text">{{otpLabelTexts.mobile_number_control}}</span>
+			<div class="col-lg-5 col-md-5 col-sm-6 col-xs-12 CC_no-padding-left">
+				<mat-form-field>
+					<span>+91</span>
+					<input matInput class="mob-number" formControlName="mobileNumberControl" required maxlength=10
+						minlength=10>
+				</mat-form-field>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-2 col-xs-12 CC_no-padding-left">
+				<button class='btn CC_call-doc' type='submit'
+					[disabled]="!otpForm.valid">{{otpLabelTexts.button_text}}</button>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-4 col-xs-12 alert alert-danger text-center" *ngIf='isOtpformInValid()'>
+				{{errorMessages.validation.generic}}
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-4 col-xs-12 alert alert-danger text-center"
+				*ngIf='otpServiceError && !isOtpformInValid()'>
+				{{otpServiceError}}
+			</div>
+		</form>
+	</div>
+	<div *ngIf="displayOtpVerificationForm">
+		<app-otp-verification [mobile]="userMobile" (onCancelOtpVerification)="triggerOtpVerificationCancelEvent()"
+			(onOtpVerified)="triggerOtpVerifiedEvent()">
+		</app-otp-verification>
+	</div>
+	<div *ngIf="displayRegistrationForm">
+		<app-user-registration [mobile]="userMobile" (onCancelRegistration)="triggerOtpVerificationCancelEvent()"
+			(onRegistrationSuccess)="triggerUserRegisteredEvent()">
+		</app-user-registration>
+	</div>
+</div>

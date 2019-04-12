@@ -1,0 +1,52 @@
+h4 {
+    margin: 2% 0 2% 0;
+    padding-left: 15px;
+}
+.CC_doc-fees {
+    float: left;
+    font-weight: 400;
+    font-size: 16px;
+}
+.CC_fees-amount {
+    float: right;
+    font-weight: 600;
+    font-size: 18px;
+}
+.CC_payables-row {
+    background-color: #f7f7f7;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-top: 18px;
+}
+.payable-section {
+    padding: 0;
+    display: table;
+}
+.payable-section .left-area {
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+}
+.payable-section .right-area {
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .CC_booking-verification-area {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .CC_your-details-area {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .payable-section,
+    .payable-section .left-area,
+    .payable-section .right-area {
+        display: block;
+        float: left;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

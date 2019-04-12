@@ -1,0 +1,19 @@
+.widget-book-appoinment-powered {
+    font-size: 11px;
+    color: #6f6f6f;
+    position: relative;
+    text-align: right;
+}
+.widget-book-appoinment-powered span {
+    display: inline-block;
+    color: #9c9c9c;
+}
+.widget-book-appoinment-powered img {
+    height: 16px;
+    padding-left: 4px;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .widget-book-appoinment-powered {
+        padding-top: 26px;
+    }
+}

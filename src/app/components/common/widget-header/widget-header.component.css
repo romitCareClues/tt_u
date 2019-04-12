@@ -1,0 +1,43 @@
+.close-frame {
+    position: absolute;
+    display: inline-block;
+    right: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.widget-book-appoinment-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 15px;
+    display: flex;
+}
+.widget-book-appoinment-title a:hover {
+    text-decoration: none;
+}
+.widget-book-appoinment-title i {
+    font-size: 24px;
+    border: 3px solid #4a4a4a;
+    border-radius: 50%;
+    padding: 10px;
+    margin-right: 15px;
+    margin-top: 3px;
+    color: #4a4a4a;
+}
+.widget-book-appoinment-title span {
+    display: block;
+}
+.widget-book-appoinment-title span:first-child {
+    font-size: 20px;
+    font-weight: 300;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .widget-book-appoinment-title {
+        padding: 0; 
+        font-size: 18px;
+    }
+    .widget-book-appoinment-title span:first-child {
+        font-size: 16px;
+    }
+}

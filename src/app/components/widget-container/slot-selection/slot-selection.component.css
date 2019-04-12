@@ -1,0 +1,21 @@
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .CC_department-area,
+    .CC_slot-selection-area {
+        padding: 0;
+    }
+    .CC_department-date-header-area {
+        padding-top:15px !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    .CC_slot {
+        padding: 0;
+    }
+    .CC_btn-proceed {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .CC_pick-time-area {
+        padding-right: 0;
+    }
+}

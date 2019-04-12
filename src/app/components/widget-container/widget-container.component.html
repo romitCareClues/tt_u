@@ -1,0 +1,47 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Doctor Widget</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body> -->
+
+<div class="container widgetContainer">
+
+    <div *ngIf="inputParamsValidStatus; else inputErrorBlock">
+        <div class="displaFlex" *ngIf='clinic'>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <app-widget-header [clinic]='clinic'></app-widget-header>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding content">
+                <!-- <div *ngIf="clinicDepartments">
+                <app-department-selection [departments]='clinicDepartments'></app-department-selection>
+              </div> -->
+                <!-- <app-doctor-list [doctorList]='doctorList' [paginationMetadata]='paginationMetadata'
+                  (onPagerClick)="onDoctorListPageChange($event)">
+                </app-doctor-list> -->
+                <router-outlet></router-outlet>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding footer">
+                <app-widget-footer></app-widget-footer>
+            </div>
+        </div>
+        <div class="alert alert-danger" *ngIf='clinicNotFoundStatus'>
+            {{errorMessages.message.validation.invalid_clinic_slug}}
+        </div>
+    </div>
+
+    <ng-template #inputErrorBlock>
+        <div class="alert alert-danger">
+            {{errorMessages.message.validation.clinic_slug}}
+        </div>
+    </ng-template>
+
+</div>
+
+<!-- </body>
+      
+      </html> -->

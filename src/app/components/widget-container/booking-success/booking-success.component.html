@@ -1,0 +1,44 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <app-doctor-booking-header></app-doctor-booking-header>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_booking-area">
+    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 CC_booking-details">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 CC_no-padding-left">
+            <span>{{labels.fees_label}}</span>
+            <span>{{schedule?.gross_amount | currency:'INR' : 'symbol' : '1.0'}}</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 CC_no-padding-left">
+            <span>{{labels.duration_label}}</span>
+            <span>{{getDuration()}}</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 CC_no-padding-left">
+            <span>{{labels.payable_label}}</span>
+            <span>{{labels.clinic_text}}</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 CC_no-padding-left">
+            <span>{{labels.availability_label}}</span>
+            <span>{{labels.availability_text}}</span>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 CC_booking-success">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4 CC_no-padding CC_booking-success-sign text-right">
+            <svg version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 488.878 488.878"
+                style="enable-background:new 0 0 488.878 488.878;" xml:space="preserve">
+                <g>
+                    <polygon style="fill:#dc437b;"
+                        points="143.294,340.058 50.837,247.602 0,298.439 122.009,420.447 122.149,420.306 144.423,442.58 488.878,98.123 437.055,46.298" />
+                </g>
+            </svg>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-8">
+            <p>{{labels.appointment_text}}<br><i>{{labels.success_booking_text}}</i></p>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_confirm-text text-center">
+    <span>{{labels.success_text}}</span>
+    <div class='CC_btn-proceed gap-up right-area'>
+        <button class='btn btn-primary'
+            (click)='onBookAnotherAppointmentClick()'>{{labels.book_another_button}}</button>
+    </div>
+</div>

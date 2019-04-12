@@ -1,0 +1,25 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_otp-section-area">
+	<form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding" [formGroup]="otpVerificationForm" (ngSubmit)="onVerifyOtp()">
+		<h4>{{labels.main_label}}</h4>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 widget-get-otp-text">{{getHeaderText()}}</div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 widget-otp-area">
+			<input type="number" tabindex="1" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_1">
+			<input type="number" tabindex="2" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_2">
+			<input type="number" tabindex="3" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_3">
+			<input type="number" tabindex="4" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_4">
+			<input type="number" tabindex="5" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_5">
+			<input type="number" tabindex="6" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_6">
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 CC_no-padding widget-get-otp-button" *ngIf='!otpVerificationSuccess'>
+			<button class="appoinment-btn btn pull-left" type="button" (click)="onCancel()">{{labels.cancel_button}}<i class="fa fa-angle-left icon-left" aria-hidden="true"></i></button>
+			<button class="verify-btn btn pull-right" [disabled]="!otpVerificationForm.valid" type="submit">{{labels.verify_button}}<i class="fa fa-angle-right icon-right" aria-hidden="true"></i></button>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 widget-otp-alert">
+			<div class="alert alert-danger text-center" *ngIf="isOtpVerificationFormValid()">{{errorMessages.validation.generic}}</div>
+			<div class="alert alert-danger text-center" *ngIf="otpVerificationServiceError && otpVerificationForm.valid">{{otpVerificationServiceError}}</div>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 widget-otp-alert" *ngIf="otpVerificationSuccess">
+			<div class="alert alert-success text-center">{{labels.verification_success}}</div>
+		</div>
+	</form>
+</div>

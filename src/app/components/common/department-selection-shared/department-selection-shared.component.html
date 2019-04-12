@@ -1,0 +1,28 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_department-date-area " *ngIf="departments">
+  <div *ngIf="departmentName"><strong>Department Name: </strong>{{departmentName | uppercase}}</div>
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 CC_department-area">
+    <mat-label>Select Department</mat-label>
+    <mat-form-field floatLabel="never">
+      <!-- <mat-label class="select-label">Select</mat-label> -->
+      <mat-select [formControl]="departmentSelectControl" [errorStateMatcher]="departmentSelectErrorMatcher">
+        <mat-option *ngFor="let department of departments" [value]="department.name">{{department?.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 CC_department-area">
+    <mat-label>Pick a Date</mat-label>
+    <mat-form-field>
+      <button class="btn btn-date"><i class="glyphicon glyphicon-menu-left" aria-hidden="true"></i></button>
+      <button class="btn btn-date"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i></button>
+      <input class="date-field" matInput [matDatepicker]="picker" [formControl]="appointmentDateSelectControl">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 CC_btn-proceed">
+    <button class='btn' [disabled]="departmentSelectControl?.errors?.required || !departmentSelectControl?.dirty"
+      (click)="onProceedButtonClick()">
+      Proceed
+    </button>
+  </div>
+</div>

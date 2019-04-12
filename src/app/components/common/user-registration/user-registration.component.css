@@ -1,0 +1,72 @@
+.CC_register-form input {
+    height: 41px;
+    border-radius: 2px;
+}
+.CC_register-form button {
+    margin-top: 25px;
+    height: 41px;
+    border-radius: 2px;
+    border: 1px solid #dc437b;
+    background-color: #dc437b;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+.CC_register-form button[disabled] {
+    background-color: #999;
+    border: 1px solid #999;
+}
+.CC_register-form .alert-danger {
+    position: absolute;
+    top: 32px;
+    right: 21px;
+    background-color: #9C27B0;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 17px;
+    font-size: 11px;
+}
+.CC_register-mob-number {
+
+}
+.CC_register-mob-number span {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.CC_register-mob-number span:nth-child(2) {
+    font-size: 18px;
+    color: #909090;
+    font-weight: 400;
+    padding-top: 8px;
+    border: 1px solid #d0caca;
+    min-height: 41px;
+    border-radius: 3px;
+    padding-left: 12px;
+}
+.CC_register-mob-number span:nth-child(2) i {
+    color: #d3145a;
+    position: absolute;
+    right: 14px;
+    top: 34px;
+    cursor: pointer;
+    font-size: 21px;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .CC_otp-section-area {
+        padding-left: 0;
+    }
+    .CC_register-form,
+    .CC_register-form .CC_no-padding-left,
+    .CC_register-mob-number {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .CC_register-mob-number {
+        padding-bottom: 15px;
+    }
+    .CC_register-form button {
+        margin-top: 0;
+    }
+}

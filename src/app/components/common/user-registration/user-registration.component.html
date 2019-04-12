@@ -1,0 +1,31 @@
+<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 CC_register-mob-number CC_no-padding-right">
+	<span class="widget-get-otp-text">{{labels.header_text}}</span>
+	<span>
+		{{mobile}}
+		<!-- <i class="glyphicon glyphicon-edit" (click)="onCancelButtonClicked();"></i> -->
+	</span>
+</div>
+<form class="col-lg-9 col-md-9 col-sm-9 col-xs-12 CC_register-form" #registrationForm="ngForm">
+	<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 CC_no-padding-left">
+		<label for="fname">{{labels.first_name}}:</label>
+		<input type="text" class="form-control" id="fname" required [(ngModel)]="first_name" #firstName="ngModel"
+			name='firstName'>
+		<div [hidden]="registrationForm.form.valid || firstName.valid || firstName.pristine" class="alert alert-danger">
+			Required</div>
+	</div>
+	<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 CC_no-padding-left">
+		<label for="lname">{{labels.last_name}}:</label>
+		<input type="text" class="form-control" id="lname" required [(ngModel)]="last_name" #lastName="ngModel"
+			name='lastName'>
+		<div [hidden]="registrationForm.form.valid || lastName.valid || lastName.pristine" class="alert alert-danger">
+			Required</div>
+	</div>
+	<button type="submit" class="btn btn-default col-lg-2 col-md-2 col-sm-2 col-xs-12" (click)="onRegister();"
+		[disabled]="!registrationForm.form.valid">
+		{{labels.register_button_text}}
+	</button>
+	<button type="submit" class="appoinment-btn btn pull-left col-lg-2 col-md-2 col-sm-2 col-xs-12"
+		(click)="onCancelButtonClicked();">
+		{{labels.cancel_button_text}}
+	</button>
+</form>

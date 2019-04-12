@@ -1,0 +1,23 @@
+h4 {
+    margin: 2% 0 2% 0;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .CC_mob-numbers-area {
+        padding-right: 0;
+    }
+    .CC_otp-section-area,
+    .CC_mobile-number-header {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .CC_call-to-book-form {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .CC_call-to-book-form .CC_no-padding-left {
+        padding-right: 0;
+    }
+    .CC_call-doc {
+        margin-top: 15px;
+    }
+}

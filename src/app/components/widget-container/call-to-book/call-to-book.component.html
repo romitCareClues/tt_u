@@ -1,0 +1,22 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_call-to-book">
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_no-padding CC_call-to-book-text">
+		<span>{{displayLabel.call_to_book_display_text}}</span>
+	</div>
+	<form class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_call-to-book-form" [formGroup]="callToBookForm" (ngSubmit)="onCallToBookFormSubmit()">
+		<span>Enter your Mobile Number</span>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 CC_no-padding-left CC_call-to-book-field">
+			<mat-form-field>
+				<span>+91</span>
+				<input matInput class="mob-number" formControlName="mobileNumberControl" required maxlength=10 minlength=10>
+			</mat-form-field>
+		</div>
+		<div class="col-lg-2 col-md-3 col-sm-3 col-xs-12 CC_no-padding-left CC_call-to-book-button">
+			<button class='btn CC_call-doc' type='submit' [disabled]="!callToBookForm.valid || disableCallToBookButton">
+				{{displayLabel.call_now_button}}
+			</button>
+		</div>
+		<div class='alert alert-danger text-center col-lg-12 col-md-12 col-sm-12 col-xs-12' *ngIf='isformInValid()'>
+			{{validationMessages.generic}}
+		</div>
+	</form>
+</div>

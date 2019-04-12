@@ -1,0 +1,1 @@
+export { CONSULTATION_VISIT_TYPES } from './consultation_visit_types';

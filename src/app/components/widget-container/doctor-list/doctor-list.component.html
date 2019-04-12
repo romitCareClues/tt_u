@@ -1,0 +1,26 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_doc-listing-search">
+	<app-department-selection-shared (reloadDoctorListEvent)="onDepartmentChange($event)">
+	</app-department-selection-shared>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_doc-listing-search">
+	<input type='text' (input)='onDoctorSearch()' placeholder='Search Doctors' [(ngModel)]='searchQuery'>
+	<i class="glyphicon glyphicon-search"></i>
+</div>
+<div *ngIf="isDoctorListAvailable()" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_doc-listing-area">
+	<div *ngIf="doctorList.length > 0; else doctorListNotfound">
+		<ul class="list-group col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_doc-listing-row"
+				*ngFor="let doctor of doctorList | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalRecordCount }">
+				<app-doctor-card [doctor]='doctor'></app-doctor-card>
+			</div>
+		</ul>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding">
+			<pagination-controls (pageChange)="onPageNumberClick($event)" directionLinks="true" autohide="true">
+			</pagination-controls>
+		</div>
+	</div>
+	<ng-template #doctorListNotfound>
+		<div class="alert alert-warning" *ngIf='doctorList.length==0 && doctorFound'>{{errorMessages.message.no_data}}
+		</div>
+	</ng-template>
+</div>

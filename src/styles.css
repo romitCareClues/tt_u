@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+.CC_no-padding {
+    padding: 0;
+}
+.CC_no-padding-left {
+    padding-left: 0 !important;
+}
+.CC_no-padding-right {
+    padding-right: 0 !important;
+}
+.CC_padding-top {
+    padding-top: 15px;
+}
+.gap-up {
+    padding-top:25px;
+}
+.gap-down {
+    padding-bottom: 25px;
+}
+.margin-top {
+    margin-top: 15px;
+}
+.mat-calendar-body-selected {
+    background-color: #d3145a !important;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color:#d3145a !important;
+}

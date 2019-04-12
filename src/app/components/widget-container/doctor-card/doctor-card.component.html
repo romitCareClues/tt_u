@@ -1,0 +1,26 @@
+<li class="list-group-item">
+	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-12 CC_no-padding-left">
+		<div class="CC_doc-img">
+			<img [src]="doctorImage" alt="CareClues">
+		</div>
+		<div class="CC_doc-details">
+			<span class="CC_doc-name">{{ doctorPrefix }} {{ doctorFulName }}</span>
+			<span class="CC_doc-degree q">{{qualifications}}</span>
+			<span class="CC_doc-degree s">{{specializations}}</span>
+		</div>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 CC_doc-book-slot" *ngIf='!hideBookAndCallButton'>
+		<ng-container *ngIf="bookingButtonType == callToBookingButtonEnum;else bookAppointmentButton">
+			<button class='btn CC_book-slot'
+				(click)="toggleCallToBookFormDisplay()">{{displayLabel[callToBookingButtonEnum]}}</button>
+		</ng-container>
+		<ng-template #bookAppointmentButton>
+			<button class='btn CC_book-slot'
+				(click)='onBookAppointmentClick()'>{{displayLabel[bookingButtonEnum]}}</button>
+		</ng-template>
+	</div>
+
+	<!-- Call To Book Section -->
+	<app-call-to-book *ngIf="callToBookFormDisplayStatus" [doctorId]='doctor.id'></app-call-to-book>
+
+</li>

@@ -1,0 +1,74 @@
+h4 {
+    margin: 2% 0 2% 0;
+}
+.widget-otp-area {
+    /*padding: 22px 0 0 0;*/
+    padding: 0;
+}
+.widget-otp-area input {
+    height: 41px;
+    width: 15.10%;
+    display: block;
+    border-radius: 2px;
+    border: 1px solid #c5c5c5;
+    text-align: center;
+    padding: 0;
+    margin: 0 auto;
+    font-size: 22px !important;
+    padding-left: 15px;
+    float: left;
+    margin-right: 8px;
+}
+.widget-get-otp-text {
+    font-size: 13px;
+    color: #717171;
+    line-height: 1.3em;
+    padding: 0 0 15px 0;
+}
+.widget-get-otp-button .appoinment-btn {
+    height: 41px;
+    border-radius: 3px;
+    font-size: 16px;
+    text-align: left;
+    position: relative;
+    outline: 0;
+    cursor: pointer;
+}
+.widget-get-otp-button .verify-btn {
+    height: 41px;
+    border-radius: 3px;
+    box-shadow: 0 4px 13px 0 rgba(0, 0, 0, 0.1);
+    background-color: #d3145a;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: left;
+    position: relative;
+    outline: 0;
+    cursor: pointer;
+}
+.widget-get-otp-button .verify-btn[disabled] {
+    background-color: #c5c5c5;
+    cursor: not-allowed;
+}
+.widget-otp-alert .alert {
+    margin: 0;
+    padding: 9px;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+    .widget-otp-alert,
+    .CC_otp-section-area {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .widget-otp-area {
+        margin-bottom: 15px;
+    }
+    .widget-otp-area input {
+        padding-left: 0;
+        margin-right: 5px;
+        width: 14.9%;
+    }
+    .widget-otp-alert {
+        padding-top: 15px;
+    }
+}

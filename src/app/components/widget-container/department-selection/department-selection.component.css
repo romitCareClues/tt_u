@@ -1,0 +1,227 @@
+@import '~ngx-bootstrap/datepicker/bs-datepicker.css';
+.CC_department-date-area {
+    background-color: #f5f5f5;
+    padding-top: 0;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+.CC_department-area .mat-form-field-infix {
+    border: 2px solid #000;
+}
+.CC_department-area mat-label {
+    display: block;
+    font-size: 13px;
+    color: #717171;
+    padding-bottom: 8px;
+    line-height: 1em;
+}
+.CC_department-area .mat-form-field {
+    width: 100%;
+    border: 1px solid #dedede;
+}
+:host /deep/ .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+:host /deep/ .mat-button-wrapper {
+    font-size: 24px;
+    padding-bottom: 0;
+}
+.CC_department-area mat-label.select-label {
+    padding-left: 15px;
+    padding-top: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000;
+}
+:host /deep/ .mat-select-value span {
+    height: 40px;
+    padding-top: 7px;
+    padding-bottom: 0;
+    font-size: 14px;
+}
+:host /deep/ .mat-form-field-infix {
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+    border-radius: 3px;
+    background-color: #fff;
+}
+:host /deep/ .mat-form-field-underline {
+    display: none;
+}
+:host /deep/ .mat-select-arrow-wrapper {
+    padding-right: 10px;
+    border-left: 1px solid #b7b7b7;
+    padding-left: 10px;
+}
+:host /deep/ .mat-select-value {
+    height: 40px;
+    vertical-align: middle;
+    padding-left: 15px;
+    font-weight: 500;
+    font-size: 14px;
+}
+:host /deep/ .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color:#d3145a;
+}
+:host /deep/ .mat-input-element {
+    height: 40px;
+    padding: 0 15px;
+}
+:host /deep/ .mat-form-field-suffix {
+    position: absolute;
+    font-size: 30px;
+    line-height: 1em;
+    right: 0;
+    top: -4px;
+}
+:host /deep/ .mat-datepicker-toggle-active {
+    color: #d3145a;
+}
+:host /deep/ .mat-select {
+    color: #d3145a !important;
+}
+:host /deep/ .btn-date {
+    display: inline-block;
+    min-height: 40px;
+    background-color: transparent;
+    border-right: 1px solid #b7b7b7;
+    border-radius: 0;
+    font-size: 16px;
+    color: #adaaaa;
+    line-height: 1em;
+}
+:host /deep/ .date-field {
+    width: calc(100% - 33%);
+}
+:host /deep/ .mat-form-field {
+    width: 100%;
+}
+:host /deep/ .glyphicon-search {
+    position: absolute;
+    right: 12px;
+    font-size: 20px;
+    top: 8px;
+    color: #999;
+}
+:host /deep/ .mat-calendar-body-selected {
+    background-color: #d3145a;
+}
+.CC_btn-proceed button.btn[disabled] {
+    background-color: #999;
+}
+.CC_btn-proceed button {
+    height: 41px;
+    border-radius: 3px;
+    box-shadow: 0 4px 13px 0 rgba(0, 0, 0, 0.1);
+    background-color: #d3145a;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: left;
+    position: relative;
+    margin-top: 21px;
+}
+.booking-verification-button {
+    margin-top: 0 !important;
+}
+.CC_doc-search-divider {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 5%;
+    font-size: 16px;
+}
+.CC_doc-search-divider:before {
+    border-top: 1px solid #d0d0d0;
+    content: "";
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 95%;
+    z-index: -1;
+}
+.CC_doc-search-divider span {
+    background: #fff;
+    padding: 0 15px;
+}
+.CC_search-doctor-area {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.CC_search-doctor-area span {
+    display: block;
+    font-size: 13px;
+    color:#717171;
+    padding-bottom: 6px;
+    text-align: left;
+}
+.CC_doc-search {
+    width: 100%;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    font-size: 16px;
+    color: #000000;
+    outline: 0;
+    border: 1px solid #c7c7c7;
+    overflow: hidden;
+    position: relative;
+    display: block;
+}
+.procedure-form-area {
+    padding-top: 25px;
+}
+.CC_pick-time-area {
+    padding-top:25px;
+    padding-left: 0;
+}
+.CC_pick-time-area .slot-label {
+    display: block;
+    font-size: 13px;
+    color: #717171;
+    padding-bottom: 15px;
+    line-height: 1em;
+    padding-left: 15px;
+}
+.CC_slot span {
+    display: block;
+    text-align: center;
+    border: 1px solid #c1bfbf;
+    margin-bottom: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1em;
+    cursor: pointer;
+}
+.CC_slot span.select {
+    background-color: #d3145a;
+    border: 1px solid #d3145a;
+    color:#fff;
+}
+@media only screen and (min-width:320px) and (max-width:768px) {
+	.CC_btn-proceed button {
+        margin-top: 15px;
+        width: 100%;
+    }
+	.CC_department-date-area {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+    }
+    .CC_department-area {
+        padding-top:15px;
+    }
+    .CC_pick-time-area span {
+        padding-left: 0 !important;
+        padding-right: 0;
+        width: 90%;
+    }
+    .booking-verification-button {
+        outline: 0;
+    }
+}
