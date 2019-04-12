@@ -44,6 +44,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   currentDate: string;
 
   referer: string;
+  serverRespondedForSlotListing: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,6 +59,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.validationMessages = ERROR_MESSAGES.slot_selection.message.validation;
     this.currentDate = moment().format('YYYY-MM-DD');
     this.selectedDate = this.getDatePreSelectValue();
+    this.serverRespondedForSlotListing = false;
   }
 
   ngOnInit() {
@@ -155,8 +157,10 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
       this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
         (successResponse) => {
           this.parseAndSetSlots(successResponse);
+          this.serverRespondedForSlotListing = true;
         },
         (errorResponse) => {
+          this.serverRespondedForSlotListing = true;
         }
       );
     }
