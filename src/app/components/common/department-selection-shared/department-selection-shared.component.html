@@ -1,5 +1,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_department-date-area " *ngIf="departments">
-  <div *ngIf="departmentName"><strong>Department Name: </strong>{{departmentName | uppercase}}</div>
+  <div class="col-lg12 col-md-12 col-sm-12 col-xs-12 CC_department-selection" *ngIf="departmentName">
+    <strong>Department Name: </strong>{{departmentName | uppercase}}
+  </div>
   <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 CC_department-area">
     <mat-label>Select Department</mat-label>
     <mat-form-field floatLabel="never">
