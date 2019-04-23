@@ -17,5 +17,6 @@ export {
     OtpComponent,
     OtpVerificationComponent,
     UserRegistrationComponent,
-    DepartmentSelectionSharedComponent
+    DepartmentSelectionSharedComponent,
+    LoaderComponent
 } from "./common";
