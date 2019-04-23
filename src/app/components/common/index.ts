@@ -5,3 +5,4 @@ export { OtpComponent } from "./otp/otp.component";
 export { OtpVerificationComponent } from './otp-verification/otp-verification.component';
 export { UserRegistrationComponent } from './user-registration/user-registration.component';
 export { DepartmentSelectionSharedComponent } from './department-selection-shared/department-selection-shared.component';
+export { LoaderComponent } from './loader/loader.component';

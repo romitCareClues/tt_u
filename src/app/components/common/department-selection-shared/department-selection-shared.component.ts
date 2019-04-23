@@ -156,4 +156,15 @@ export class DepartmentSelectionSharedComponent implements OnInit {
     return moment(date).format(format);
   }
 
+  isDepartmentSelectionAllowed(): boolean {
+    let status: boolean;
+    if (this.isCurrentRouteDepartmentSelection() !== true) {
+      status = typeof this.referer !== 'undefined';
+    }
+    else {
+      status = true;
+    }
+    return status;
+  }
+
 }
