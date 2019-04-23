@@ -40,11 +40,11 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
     this.errorMessages = ERROR_MESSAGES.widget_container;
     this.clinicNotFoundStatus = false;
     this.displayLoader = false;
-    this.subscribeToLoaderEvent();
   }
 
   ngOnInit() {
     this.subscribeToRouteChangeEvent();
+    this.subscribeToLoaderEvent();
   }
 
   ngOnDestroy() {
@@ -55,7 +55,7 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
   }
 
   subscribeToLoaderEvent(): void {
-    this.subscriptions.push(this.loaderService.loaderSubject.subscribe((event) => { this.displayLoader = event.show }));
+    this.subscriptions.push(this.loaderService.loaderSubject.subscribe((event) => { this.displayLoader = event.show; }));
   }
 
   subscribeToRouteChangeEvent(): void {
