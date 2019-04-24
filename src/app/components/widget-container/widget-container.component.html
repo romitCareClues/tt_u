@@ -9,6 +9,10 @@
 
 <body> -->
 
+<ng-container *ngIf="displayLoader">
+    <app-loader></app-loader>
+</ng-container>
+
 <div class="container widgetContainer">
 
     <div *ngIf="inputParamsValidStatus; else inputErrorBlock">

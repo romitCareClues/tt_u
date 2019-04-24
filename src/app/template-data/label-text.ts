@@ -12,12 +12,13 @@ export const LABEL_TEXTS = {
         visit_type_selction: 'What you are visiting for ?',
         date_selection: 'Select Date',
         slot_selection: 'Pick a time slot',
-        proceed_button: 'Proceed'
+        proceed_button: 'Proceed',
+        no_slot_available: 'No slots available. Please select another date.'
     },
     send_otp: {
         header_title: 'Your Details',
         mobile_number_control: 'Enter your Mobile Number',
-        button_text: 'Send Otp'
+        button_text: 'Send OTP'
     },
     doctor_booking_header: {
         time_date: 'Time & Date',

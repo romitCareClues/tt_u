@@ -8,8 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-widget:prod": "ng build --prod --output-hashing none && node build-widget.js",
-    "build-widget:dev": "ng build -c=development --output-hashing none && node build-widget.js",
+    "build-widget:prod": "ng build --prod --output-hashing none",
+    "build-widget:dev": "ng build -c=development --output-hashing none",
+    "build-widget:stage": "ng build -c=staging --output-hashing none",
     "serve": "angular-http-server --path dist/doctor-widget -p 8080 --open"
   },
   "private": true,

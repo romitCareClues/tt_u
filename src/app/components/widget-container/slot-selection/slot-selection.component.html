@@ -20,12 +20,12 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_department-area">
                 <mat-label>{{displayLabel.date_selection}}</mat-label>
                 <mat-form-field>
-                    <button class="btn btn-date">
+                    <!--button class="btn btn-date">
                         <i class="glyphicon glyphicon-menu-left" aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-date">
                         <i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>
-                    </button>
+                    </button-->
                     <input class="date-field" matInput [matDatepicker]="picker"
                         [formControl]="appointmentDateSelectControl" (dateChange)="onAppointmentDateChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -37,6 +37,11 @@
                 <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 CC_slot" *ngFor='let bucket of buckets'
                     (click)="onSlotSelect(bucket)">
                     <span [ngClass]="{'select':bucket == this.selectedSlot}">{{getStartTime(bucket.start)}}</span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="buckets.length==0 && serverRespondedForSlotListing">
+                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 25px;">
+                    <span>{{displayLabel.no_slot_available}}</span>
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_btn-proceed text-right">

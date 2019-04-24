@@ -2,7 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
+import {
+  HttpConfigInterceptor,
+  LoaderInterceptor
+} from './interceptors';
 
 import { RouterModule } from '@angular/router';
 import { routes } from './routes';
@@ -21,7 +24,8 @@ import {
   MatNativeDateModule,
   MatInputModule,
   // MatButtonModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatProgressBarModule
 } from '@angular/material';
 
 // component imports
@@ -41,7 +45,8 @@ import {
   OtpVerificationComponent,
   UserRegistrationComponent,
   BookingSuccessComponent,
-  DepartmentSelectionSharedComponent
+  DepartmentSelectionSharedComponent,
+  LoaderComponent
 } from './components';
 
 @NgModule({
@@ -61,7 +66,8 @@ import {
     OtpVerificationComponent,
     UserRegistrationComponent,
     BookingSuccessComponent,
-    DepartmentSelectionSharedComponent
+    DepartmentSelectionSharedComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -76,9 +82,11 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatProgressBarModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

@@ -4,7 +4,7 @@
 export const environment = {
   production: true,
   env: 'prod',
-  base_url: 'https://api.careclues.com',
+  base_url: 'https://chopstickapi.careclues.com',
   api_version: 'api/v1',
   api_url: function () { return `${this.base_url}/${this.api_version}/` },
   public_url: function () { return `${this.base_url}/${this.api_version}/public/` },

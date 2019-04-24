@@ -6,6 +6,7 @@ import { PAGE_CONFIGURATIONS } from '../../../configurations';
 
 import { ClinicService } from '../../services/clinic.service';
 import { CustomRouteService } from '../../services/common/custom-route.service';
+import { LoaderService } from '../../services/common/loader.service';
 
 @Component({
   selector: 'app-widget-container',
@@ -27,18 +28,23 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
   clinicId: number;
   clinicNotFoundStatus: boolean;
 
+  displayLoader: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private clinicService: ClinicService,
-    private customRouteService: CustomRouteService
+    private customRouteService: CustomRouteService,
+    private loaderService: LoaderService
   ) {
     this.errorMessages = ERROR_MESSAGES.widget_container;
     this.clinicNotFoundStatus = false;
+    this.displayLoader = false;
   }
 
   ngOnInit() {
     this.subscribeToRouteChangeEvent();
+    this.subscribeToLoaderEvent();
   }
 
   ngOnDestroy() {
@@ -46,6 +52,10 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  subscribeToLoaderEvent(): void {
+    this.subscriptions.push(this.loaderService.loaderSubject.subscribe((event) => { this.displayLoader = event.show; }));
   }
 
   subscribeToRouteChangeEvent(): void {

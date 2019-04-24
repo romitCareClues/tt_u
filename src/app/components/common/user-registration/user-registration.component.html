@@ -20,12 +20,16 @@
 		<div [hidden]="registrationForm.form.valid || lastName.valid || lastName.pristine" class="alert alert-danger">
 			Required</div>
 	</div>
-	<button type="submit" class="btn btn-default col-lg-2 col-md-2 col-sm-2 col-xs-12" (click)="onRegister();"
-		[disabled]="!registrationForm.form.valid">
-		{{labels.register_button_text}}
-	</button>
-	<button type="submit" class="appoinment-btn btn pull-left col-lg-2 col-md-2 col-sm-2 col-xs-12"
-		(click)="onCancelButtonClicked();">
-		{{labels.cancel_button_text}}
-	</button>
+	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="padding: 0;">
+		<button type="submit" style="width:100%;" class="appoinment-btn" (click)="onRegister();"
+			[disabled]="!registrationForm.form.valid">
+			{{labels.register_button_text}}
+		</button>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+		<button type="submit" class="cancel-btn btn pull-right"
+			(click)="onCancelButtonClicked();">
+			{{labels.cancel_button_text}}
+		</button>
+	</div>
 </form>
