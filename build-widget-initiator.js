@@ -4,14 +4,18 @@ const minify = require('@node-minify/core');
 const uglifyjs = require('@node-minify/uglify-js');
 const gcc = require('@node-minify/google-closure-compiler');
 
+const args = process.argv.slice(2);
+const environment = args[0];
+
+const sourcePath1 = './init-widget/configuration.js';
+const sourcePath2 = './init-widget/init-widget.js';
+
+const tempDestinationPath = './dist/doctor-widget/assets/js/temp1-widget-initiator.js';
+const tempDestinationPath2 = './dist/doctor-widget/assets/js/temp-2widget-initiator.js';
+const finalPath = './dist/doctor-widget/assets/js/widget-initiator.min.js';
+
 (async function build() {
-    const tempDestinationPath = './dist/doctor-widget/assets/js/temp1-widget-initiator.js';
-    const tempDestinationPath2 = './dist/doctor-widget/assets/js/temp-2widget-initiator.js';
-    const finalPath = './dist/doctor-widget/assets/js/widget-initiator.min.js';
-    const files = [
-        './init-widget/configuration.js',
-        './init-widget/init-widget.js'
-    ];
+    const files = [sourcePath1, sourcePath2];
     await fs.ensureDir('./dist/doctor-widget/assets/js');
     await concat(files, tempDestinationPath).then((result) => {
         console.log('tempDestinationPath - success');
@@ -29,7 +33,17 @@ const gcc = require('@node-minify/google-closure-compiler');
                         output: finalPath,
                         callback: function (err, min) {
                             if (!err) {
-                                console.log('finalPath - success');
+                                fs.readFile(finalPath, 'utf8', function (err, data) {
+                                    if (err) {
+                                        return console.log(err);
+                                    }
+                                    var result = data.replace(`var ENV = "development";`, `var ENV = "${environment}";`);
+
+                                    fs.writeFile(finalPath, result, 'utf8', function (err) {
+                                        if (err) return console.log(err);
+                                        else return console.log('finalPath - success' + environment);
+                                    });
+                                });
                             }
                             else {
                                 console.log('finalPath_error -> ' + err);
