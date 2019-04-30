@@ -145,31 +145,47 @@ function createModalPopup() {
             border-radius: 50%;
             height: 34px;
             width: 34px;
+            cursor: pointer;
         }
         @media (max-width: 767.98px) {
             .cc_InnerContainerArea {
                 height: 100vh;
             }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
+            }
         }
         @media (min-width: 768px) {
             .cc_InnerContainerArea {
                 width: 750px;
+                height: 100vh;
+            }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
             }
         }
         @media (min-width: 992px) {
             .cc_InnerContainerArea {
                 width: 970px;
+                height: 80vh;
+            }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
             }
         }
         @media (min-width: 1200px) {
             .cc_InnerContainerArea {
                 width: 1170px;
+                height: 80vh;
             }
         }
         @media (min-width: 1400px) {
             .cc_InnerContainerArea {
                 width: 1290px;
-                height:300px;
+                height: 80vh;
             }
         }
     `));

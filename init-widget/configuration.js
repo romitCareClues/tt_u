@@ -1,6 +1,9 @@
 var ENV = "development";
 
 var ENVIRONMENT_CONFIGS = {
+    local: {
+        base_url: 'http://localhost:8080'
+    },
     development: {
         base_url: 'https://ticklewidget.careclues.com',
     },
