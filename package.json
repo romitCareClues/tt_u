@@ -11,6 +11,7 @@
     "build-widget:prod": "ng build --prod --output-hashing none",
     "build-widget:dev": "ng build -c=development --output-hashing none",
     "build-widget:stage": "ng build -c=staging --output-hashing none",
+    "build-widget-initiator:local": "node build-widget-initiator.js local",
     "build-widget-initiator:dev": "node build-widget-initiator.js development",
     "build-widget-initiator:stage": "node build-widget-initiator.js staging",
     "build-widget-initiator:prod": "node build-widget-initiator.js production",

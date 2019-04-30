@@ -35,6 +35,7 @@
 .CC_doc-details span {
     display: block;
     line-height: 1.2em;
+    word-break: break-word;
 }
 .CC_doc-name {
     font-size: 16px;
