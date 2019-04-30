@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <title>Apollo site</title>
+</head>
+
+<body>
+    <h2>Hi. This is apollo</h2>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'clinic_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )">Clinic Level Button</button>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'department_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )">Department Level Button</button>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'physician_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )">Physician Level Button</button>
+
+    <div id="careclues_widget_container"></div>
+    <script src="http://localhost:8080/assets/js/widget-initiator.min.js"></script>
+</body>
+
+</html>
