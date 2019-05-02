@@ -12,7 +12,7 @@ const sourcePath2 = './init-widget/init-widget.js';
 
 const tempDestinationPath = './dist/doctor-widget/assets/js/temp1-widget-initiator.js';
 const tempDestinationPath2 = './dist/doctor-widget/assets/js/temp-2widget-initiator.js';
-const finalPath = './dist/doctor-widget/assets/js/widget-initiator.min.js';
+const finalPath = './dist/doctor-widget/assets/js/cc-widget-initiator.min.js';
 
 (async function build() {
     const files = [sourcePath1, sourcePath2];
