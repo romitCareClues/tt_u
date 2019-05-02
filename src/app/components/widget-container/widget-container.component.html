@@ -16,7 +16,7 @@
 <div class="container-outer">
 <div class="container widgetContainer">
 
-    <div *ngIf="inputParamsValidStatus; else inputErrorBlock">
+    <div class="displaFlex" *ngIf="inputParamsValidStatus; else inputErrorBlock">
         <div class="displaFlex" *ngIf='clinic'>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <app-widget-header [clinic]='clinic'></app-widget-header>
