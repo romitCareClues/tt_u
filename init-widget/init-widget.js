@@ -181,11 +181,19 @@ function createModalPopup() {
                 width: 1170px;
                 height: 80vh;
             }
+            .cc_TotalContainerClose {
+                top:-15px;
+                right:-15px;
+            }
         }
         @media (min-width: 1400px) {
             .cc_InnerContainerArea {
                 width: 1290px;
                 height: 80vh;
+            }
+            .cc_TotalContainerClose {
+                top:-15px;
+                right:-15px;
             }
         }
     `));
