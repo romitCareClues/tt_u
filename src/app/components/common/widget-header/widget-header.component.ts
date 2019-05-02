@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { CustomRouteService } from '../../../services/common/custom-route.service';
 import { CONFIGS } from '../../../../configurations';
@@ -14,7 +14,10 @@ export class WidgetHeaderComponent implements OnInit {
   @Input() clinic: any;
   routeListToHideBackButton: string[];
 
+  referer: string;
+
   constructor(
+    private route: ActivatedRoute,
     private location: Location,
     private customRouteService: CustomRouteService,
     private router: Router
@@ -23,6 +26,15 @@ export class WidgetHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setReferer();
+  }
+
+  setReferer(): void {
+    this.route.queryParams.subscribe(
+      (params) => {
+        this.referer = params['referer'];
+      }
+    );
   }
 
   onBackButtonClicked(): void {
@@ -37,7 +49,12 @@ export class WidgetHeaderComponent implements OnInit {
         canDisplayStatus = false;
       }
     });
-    return canDisplayStatus;
+    let status: boolean = canDisplayStatus && this.hasReferer();
+    return status;
+  }
+
+  hasReferer(): boolean {
+    return typeof this.referer !== 'undefined';
   }
 
   onAppointmentTitleClick(): void {
