@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>Apollo site</title>
+    <meta name=viewport content="width=device-width,initial-scale=1">
+</head>
+
+<body>
+    <h2>Hi. This is apollo</h2>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'clinic_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )"
+        style="margin:8px;padding:0;background:transparent;border:none;min-width:240px;outline:0;">
+        <span style="border-radius:4px;box-shadow:0 6px 10px 0 rgba(0, 0, 0, 0.12);background-image:linear-gradient(to left, #9f5cc1, #662f8e);font-size:15px;line-height:normal;color:#ffffff;padding:12px 20px;text-align:left;font-weight:600;outline:none;cursor:pointer;display:block;">Clinic Level Button</span>
+        <span style="display:block;width:100%;height:16px;padding-top:6px;padding-bottom:4px;">
+            <img style="height:14px;float:right;padding-right:12px;" src="https://careclues.com/assets/img/logo-color.svg" alt="CareClues">
+        </span>
+    </button>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'department_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )"
+        style="margin:8px;padding:0;background:transparent;border:none;min-width:240px;outline:0;">
+        <span style="border-radius:4px;box-shadow:0 6px 10px 0 rgba(0, 0, 0, 0.12);background-image:linear-gradient(to left, #9f5cc1, #662f8e);font-size:15px;line-height:normal;color:#ffffff;padding:12px 20px;text-align:left;font-weight:600;outline:none;cursor:pointer;display:block;">Department Level Button</span>
+        <span style="display:block;width:100%;height:16px;padding-top:6px;padding-bottom:4px;">
+            <img style="height:14px;float:right;padding-right:12px;" src="https://careclues.com/assets/img/logo-color.svg" alt="CareClues">
+        </span>
+    </button>
+
+    <button onClick="initCareCluesWidget(
+        {
+            location_type: 'physician_level',
+            clinic_slug: 'all-asia-medical-institute-aami-8b-near-pantaloons-gariahat-garcha-1st-lane-ballygunge',
+            department: 'pulmonology',
+            physician_slug: 'ani-bhadra-99'
+        }
+    )"
+        style="margin:8px;padding:0;background:transparent;border:none;min-width:240px;outline:0;">
+        <span style="border-radius:4px;box-shadow:0 6px 10px 0 rgba(0, 0, 0, 0.12);background-image:linear-gradient(to left, #9f5cc1, #662f8e);font-size:15px;line-height:normal;color:#ffffff;padding:12px 20px;text-align:left;font-weight:600;outline:none;cursor:pointer;display:block;">Physician Level Button</span>
+        <span style="display:block;width:100%;height:16px;padding-top:6px;padding-bottom:4px;">
+            <img style="height:14px;float:right;padding-right:12px;" src="https://careclues.com/assets/img/logo-color.svg" alt="CareClues">
+        </span>
+        </button>
+
+    <div id="careclues_widget_container"></div>
+    <script src="http://localhost:8080/assets/js/cc-widget-initiator.min.js"></script>
+</body>
+
+</html>
