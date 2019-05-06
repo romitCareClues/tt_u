@@ -146,6 +146,7 @@ function createModalPopup() {
             height: 34px;
             width: 34px;
             cursor: pointer;
+            line-height: 1.1em;
         }
         @media (max-width: 767.98px) {
             .cc_InnerContainerArea {
