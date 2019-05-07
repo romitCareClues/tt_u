@@ -89,25 +89,116 @@ function createModalPopup() {
     let containerElement = document.getElementById('careclues_widget_container');
 
     let modalDivElement = document.createElement('div');
+    modalDivElement.classList.add("cc_OuterContainerArea");
     modalDivElement.id = WIDGET_ID;
-    modalDivElement.style.cssText = `display: block; position: fixed; z-index: 1; left: 0; top: 0; width: 100%;  height: 100%;
-                                    overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);`;
+    modalDivElement.style.cssText = `position: fixed; z-index: 999; left: 0; top: 0; width: 100%;  height: 100%; overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);`;
 
     let modalContentDivElement = document.createElement('div');
     modalContentDivElement.id = `modal-content-${WIDGET_ID}`;
-    modalContentDivElement.style.cssText = `background-color: #fefefe; margin: 8% auto; padding: 20px; border: 1px solid #888; width: 70%;`;
+    modalContentDivElement.classList.add("cc_InnerContainerArea");
+    //modalContentDivElement.style.cssText = `background-color: #fefefe; margin: 8% auto; padding: 20px; border: 1px solid #888; width: 70%;`;
 
     let modalCloseSpanElement = document.createElement('span');
     modalCloseSpanElement.id = `modal-close-${WIDGET_ID}`;
+    modalCloseSpanElement.classList.add("cc_TotalContainerClose");
     modalCloseSpanElement.innerHTML = `&times;`;
-    modalCloseSpanElement.style.cssText = `color: #aaa; float: right; font-size: 28px; font-weight: bold;`;
+    //modalCloseSpanElement.style.cssText = `color: #aaa; float: right; font-size: 28px; font-weight: bold;build-widget-initiator:devcursor: pointer;`;
     //modalCloseSpanElement.setAttribute("onClick", removeWidget);
     modalCloseSpanElement.addEventListener('click', removeWidget, false);
 
-    let closeSpanStylesheet = document.createElement('style');
-    closeSpanStylesheet.type = 'text/css';
-    closeSpanStylesheet.appendChild(document.createTextNode(`#modal-close-${WIDGET_ID} :hover, :focus { color: black; text-decoration: none; cursor: pointer; }`));
-    modalContentDivElement.appendChild(closeSpanStylesheet);
+    let customStyleSheet = document.createElement('style');
+    customStyleSheet.type = 'text/css';
+    customStyleSheet.appendChild(document.createTextNode(`
+        .cc_OuterContainerArea {
+            display: flex;
+            align-items: center;
+        }
+        .cc_InnerContainerArea {
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+            box-shadow: 0 14px 30px 2px rgba(0,0,0,.15);
+            position: relative;
+        }
+        .cc_InnerContainerArea:before {
+            content: " ";
+            display: table;
+            box-sizing: border-box;
+        }
+        .cc_InnerContainerArea:after {
+            content: " ";
+            display: table;
+            box-sizing: border-box;
+            clear: both;
+        }
+        .cc_TotalContainerClose {
+            text-align: center;
+            position: absolute;
+            display: inline-block;
+            right: -15px;
+            top: -15px;
+            background-color: #662f8e;
+            float: right;
+            color: #fff;
+            font-size: 30px;
+            font-weight: 600;
+            border-radius: 50%;
+            height: 34px;
+            width: 34px;
+            cursor: pointer;
+            line-height: 1.1em;
+        }
+        @media (max-width: 767.98px) {
+            .cc_InnerContainerArea {
+                height: 100vh;
+            }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
+            }
+        }
+        @media (min-width: 768px) {
+            .cc_InnerContainerArea {
+                width: 750px;
+                height: 100vh;
+            }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
+            }
+        }
+        @media (min-width: 992px) {
+            .cc_InnerContainerArea {
+                width: 970px;
+                height: 80vh;
+            }
+            .cc_TotalContainerClose {
+                top:0;
+                right:0;
+            }
+        }
+        @media (min-width: 1200px) {
+            .cc_InnerContainerArea {
+                width: 1170px;
+                height: 80vh;
+            }
+            .cc_TotalContainerClose {
+                top:-15px;
+                right:-15px;
+            }
+        }
+        @media (min-width: 1400px) {
+            .cc_InnerContainerArea {
+                width: 1290px;
+                height: 80vh;
+            }
+            .cc_TotalContainerClose {
+                top:-15px;
+                right:-15px;
+            }
+        }
+    `));
+    containerElement.appendChild(customStyleSheet);
 
     modalContentDivElement.appendChild(modalCloseSpanElement);
     modalDivElement.appendChild(modalContentDivElement);
