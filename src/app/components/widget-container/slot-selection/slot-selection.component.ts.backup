@@ -46,8 +46,6 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   referer: string;
   serverRespondedForSlotListing: boolean;
 
-  slotBasedRecordsCount: any = null;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -100,9 +98,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.doctorService.fetchClinicDoctorBySlug(this.doctorSlug, requestParam).subscribe(
       (successResponse) => {
         this.setDoctor(successResponse.data);
-        this.setSchedule();
         this.getVisitTypes();
-        this.getScheduleSlots();
+        this.setSchedule();
       },
       (errorResponse) => {
 
@@ -123,11 +120,24 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     }
   }
 
+  prepareScheduleSlotRequestQuery(): void {
+    let appointType: string = this.visitTypeSelectControl.value;
+    let requestQuery: HttpParams = new HttpParams()
+      .set('date', this.selectedDate)
+      .set('appt_type', appointType)
+      .set('expand', 'buckets');
+    if (appointType !== 'new_patient' && appointType !== 'followup') {
+      requestQuery = requestQuery.append('treatment_plan_id', appointType);
+    }
+    this.scheduleSlotRequestQuery = requestQuery;
+  }
+
   getVisitTypes(): void {
     let requestParams: string = `facility_id=${this.clinicId}&expand=generic_treatment_plan`;
     this.appointmentService.fetchAppointmentVisitTypes(this.doctorId, requestParams).subscribe(
       (successResponse) => {
         this.updateAppointVisitTypes(successResponse);
+        this.getScheduleSlots();
       },
       (errorResponse) => {
 
@@ -146,9 +156,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
       let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString());
       this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
         (successResponse) => {
-          this.scheduleSlots = successResponse;
+          this.parseAndSetSlots(successResponse);
           this.serverRespondedForSlotListing = true;
-          this.fetchAllSlotBuckets();
         },
         (errorResponse) => {
           this.serverRespondedForSlotListing = true;
@@ -157,61 +166,19 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     }
   }
 
-  prepareScheduleSlotRequestQuery(): void {
-    let appointType: string = this.visitTypeSelectControl.value;
-    let requestQuery: HttpParams = new HttpParams()
-      .set('date', this.selectedDate)
-      .set('appt_type', appointType);
-    if (appointType !== 'new_patient' && appointType !== 'followup') {
-      requestQuery = requestQuery.delete('appt_type');
-      requestQuery = requestQuery.append('treatment_plan_id', appointType);
-    }
-    this.scheduleSlotRequestQuery = requestQuery;
-  }
-
-  fetchAllSlotBuckets(): void {
-    this.scheduleSlots.forEach((slot) => {
-      this.fetchSlotBuckets(slot);
-    })
-  }
-
-
-
-  fetchSlotBuckets(slot: any, customizedQueryParams: string = null): void {
-    let requestParams: string = customizedQueryParams ? customizedQueryParams : decodeURI(this.scheduleSlotRequestQuery.toString());
-    this.appointmentService.getSlotBuckets(slot, requestParams).subscribe(
-      (successResponse) => {
-        let bucketsResponse: any[] = successResponse.data;
-        let responseRecordCount = bucketsResponse.length;
-
-        if (!this.slotBasedRecordsCount) {
-          this.slotBasedRecordsCount = { [slot.id]: responseRecordCount }
+  parseAndSetSlots(data: any[] = []): void {
+    let currentTime: any =
+      data.map(
+        (slot) => {
+          if (slot.hasOwnProperty('status')) {
+            if (slot.status == 'available') {
+              if (slot.hasOwnProperty('buckets')) {
+                this.parseAndSetBuckets(slot.buckets);
+              }
+            }
+          }
         }
-        else {
-          this.slotBasedRecordsCount[slot.id] = isNaN(this.slotBasedRecordsCount[slot.id]) ?
-            responseRecordCount :
-            (this.slotBasedRecordsCount[slot.id] + responseRecordCount);
-        }
-
-        this.parseAndSetBuckets(bucketsResponse);
-        this.navigateToNextPageBuckets(slot, successResponse.meta);
-      },
-      (error) => {
-
-      }
-    );
-  }
-
-  navigateToNextPageBuckets(whichSlot: any, meta: any = null): void {
-    if (meta) {
-      let totalRecordCount = meta.total;
-      if (this.slotBasedRecordsCount[whichSlot.id] < totalRecordCount) {
-        let currentPage: number = meta.page_no;
-        let nextPage: number = currentPage + 1;
-        let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString()) + `&page_no=${nextPage}`;
-        this.fetchSlotBuckets(whichSlot, requestParams);
-      }
-    }
+      );
   }
 
   parseAndSetBuckets(buckets: any[] = []): void {
