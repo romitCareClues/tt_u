@@ -29,4 +29,10 @@ export class DoctorService {
     return this.apiService.get(endPoint, isPublic);//.pipe(map((response) => response.data));
   }
 
+  fetchClinicSchedules(facilityId: number, doctorId: number): Observable<any> {
+    let endPoint: string = `physicians/${doctorId}/schedules?facility_id=${facilityId}`;
+    let isPublic: boolean = true;
+    return this.apiService.get(endPoint, isPublic).pipe(map((response) => response.data));
+  }
+
 }
