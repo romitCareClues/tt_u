@@ -28,4 +28,10 @@ export class AppointmentService {
     let isPublic: boolean = false;
     return this.apiService.post(endPoint, isPublic, '', '', requestBody).pipe(map((response) => response.data));
   }
+
+  getSlotBuckets(slot: any, requestParams: string): Observable<any> {
+    let endPoint: string = `slots/${slot.id}/buckets?${requestParams}`;
+    let isPublic: boolean = true;
+    return this.apiService.get(endPoint, isPublic);
+  }
 }
