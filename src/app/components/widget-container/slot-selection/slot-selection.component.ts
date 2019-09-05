@@ -140,6 +140,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   getScheduleSlots(): void {
+    this.buckets = this.scheduleSlots = [];
+    this.slotBasedRecordsCount = null;
     if (this.schedule !== null && typeof this.schedule !== 'undefined') {
       this.buckets = [];
       this.prepareScheduleSlotRequestQuery();
@@ -163,7 +165,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
       .set('date', this.selectedDate)
       .set('appt_type', appointType);
     if (appointType !== 'new_patient' && appointType !== 'followup') {
-      requestQuery = requestQuery.delete('appt_type');
+      // requestQuery = requestQuery.delete('appt_type');
       requestQuery = requestQuery.append('treatment_plan_id', appointType);
     }
     this.scheduleSlotRequestQuery = requestQuery;
@@ -174,8 +176,6 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
       this.fetchSlotBuckets(slot);
     })
   }
-
-
 
   fetchSlotBuckets(slot: any, customizedQueryParams: string = null): void {
     let requestParams: string = customizedQueryParams ? customizedQueryParams : decodeURI(this.scheduleSlotRequestQuery.toString());
@@ -224,6 +224,23 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.sortBuckets();
+  }
+
+  sortBuckets(): void {
+    this.buckets.sort((first, second) => {
+      let firstDateTimeString: string = `${this.selectedDate} ${first.start}`;
+      let secondDateTimeString: string = `${this.selectedDate} ${second.start}`;
+      let firstDateTime = moment(firstDateTimeString);
+      let secondDateTime = moment(secondDateTimeString);
+      if (firstDateTime.isBefore(secondDateTime)) {
+        return -1;
+      }
+      if (secondDateTime.isBefore(firstDateTime)) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   getStartTime(time: string): string {
