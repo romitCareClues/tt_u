@@ -1,0 +1,53 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_slot-selection-area">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_department-date-area CC_department-date-header-area"
+        *ngIf='doctor'>
+        <app-doctor-card [doctor]='doctor' [hideBookAndCallButton]='true'></app-doctor-card>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_no-padding procedure-form-area">
+        <form>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_department-area">
+                <mat-label>{{displayLabel.visit_type_selction}}</mat-label>
+                <mat-form-field>
+                    <mat-select [formControl]="visitTypeSelectControl" [errorStateMatcher]="visitTypeSelectErrorMatcher"
+                        (selectionChange)='onVisitTypeChange()'>
+                        <!-- <mat-option [value]="">Select</mat-option> -->
+                        <mat-option *ngFor="let visit of visitTypes" [value]="visit.id">
+                            {{visit?.generic_treatment_plan?.title}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_department-area">
+                <mat-label>{{displayLabel.date_selection}}</mat-label>
+                <mat-form-field>
+                    <!--button class="btn btn-date">
+                        <i class="glyphicon glyphicon-menu-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-date">
+                        <i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>
+                    </button-->
+                    <input class="date-field" matInput [matDatepicker]="picker"
+                        [formControl]="appointmentDateSelectControl" (dateChange)="onAppointmentDateChange($event)">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_pick-time-area clearfix" *ngIf='buckets.length > 0'>
+                <span class="slot-label">{{displayLabel.slot_selection}}</span>
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 CC_slot" *ngFor='let bucket of buckets'
+                    (click)="onSlotSelect(bucket)">
+                    <span [ngClass]="{'select':bucket == this.selectedSlot}">{{getStartTime(bucket.start)}}</span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="buckets.length==0 && serverRespondedForSlotListing">
+                <div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 25px;">
+                    <span>{{displayLabel.no_slot_available}}</span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_btn-proceed text-right">
+                <button class='btn' [disabled]="!isFormValid()"
+                    (click)="onProceedClick()">{{displayLabel.proceed_button}}</button>
+            </div>
+        </form>
+    </div>
+</div>
