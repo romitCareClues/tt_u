@@ -100,9 +100,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.doctorService.fetchClinicDoctorBySlug(this.doctorSlug, requestParam).subscribe(
       (successResponse) => {
         this.setDoctor(successResponse.data);
-        this.setSchedule();
         this.getVisitTypes();
-        this.getScheduleSlots();
+        this.getClinicSchedules();
       },
       (errorResponse) => {
 
@@ -116,11 +115,17 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     localStorage.setItem('cc_doctor', JSON.stringify(data));
   }
 
-  setSchedule(): void {
-    if (this.doctor.hasOwnProperty('schedules')) {
-      this.schedule = this.doctor.schedules.length > 0 ? this.doctor.schedules[0] : null;
-      localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
-    }
+  getClinicSchedules(): void {
+    this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
+      (successResponse: any[]) => {
+        this.schedule = successResponse.length > 0 ? successResponse.shift() : null;
+        localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
+        this.getScheduleSlots();
+      },
+      (errorResponse) => {
+
+      },
+    );
   }
 
   getVisitTypes(): void {
@@ -255,13 +260,13 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   onAppointmentDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.selectedDate = moment(this.appointmentDateSelectControl.value).format('YYYY-MM-DD');
-    this.getScheduleSlots();
+    this.getClinicSchedules();
     this.saveSelectedDateLocally();
   }
 
   onVisitTypeChange(): void {
     this.saveSelectedVisitTypeLocally();
-    this.getScheduleSlots();
+    this.getClinicSchedules();
   }
 
   onProceedClick(): void {
