@@ -26,9 +26,9 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
 
   clinic: any;
   clinicId: number;
-  clinicNotFoundStatus: boolean;
+  clinicNotFoundStatus: boolean = false;
 
-  displayLoader: boolean;
+  displayLoader: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,8 +38,6 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService
   ) {
     this.errorMessages = ERROR_MESSAGES.widget_container;
-    this.clinicNotFoundStatus = false;
-    this.displayLoader = false;
   }
 
   ngOnInit() {
