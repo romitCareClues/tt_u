@@ -178,8 +178,18 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   fetchAllSlotBuckets(): void {
     this.scheduleSlots.forEach((slot) => {
-      this.fetchSlotBuckets(slot);
+      if (this.isSlotAvailable(slot)) {
+        this.fetchSlotBuckets(slot);
+      }
     })
+  }
+
+  isSlotAvailable(slot: any): boolean {
+    let statusToReturn: boolean = false;
+    if (slot.hasOwnProperty('status')) {
+      statusToReturn = slot.status !== 'unavailable';
+    }
+    return statusToReturn;
   }
 
   fetchSlotBuckets(slot: any, customizedQueryParams: string = null): void {
