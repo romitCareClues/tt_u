@@ -60,7 +60,6 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.displayLabel = LABEL_TEXTS.slot_selection;
     this.validationMessages = ERROR_MESSAGES.slot_selection.message.validation;
     this.currentDate = moment().format('YYYY-MM-DD');
-    this.selectedDate = this.getDatePreSelectValue();
     this.serverRespondedForSlotListing = false;
   }
 
@@ -68,6 +67,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(
       (params) => {
         this.referer = params['referer'];
+        this.selectedDate = this.getDatePreSelectValue();
       }
     );
     this.visitTypeSelectControl = new FormControl('new_patient', [Validators.required]);
