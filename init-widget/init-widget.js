@@ -221,14 +221,13 @@ function removeWidget() {
     // document.getElementById(WIDGET_ID).remove();
     let widgetPlaceHolderElement = document.getElementById('careclues_widget_container');
     widgetPlaceHolderElement.innerHTML = "";
-    clearLocalStorage();
 }
 
-function clearLocalStorage() {
-    let storageKeys = [
-        'cc_appointment_date', 'cc_appointment_type_key', 'cc_auth_token',
-        'cc_clinic_id', 'cc_clinic_slug', 'cc_doctor', 'cc_patient_id',
-        'cc_saved_appointment', 'cc_schedule', 'cc_selected_slot', 'cc_visit_type_title'
-    ];
-    storageKeys.forEach((storageKey) => { localStorage.removeItem(storageKey); });
-}
+// function clearsessionStorage() {
+    // let storageKeys = [
+    //     'cc_appointment_date', 'cc_appointment_type_key', 'cc_auth_token',
+    //     'cc_clinic_id', 'cc_clinic_slug', 'cc_doctor', 'cc_patient_id',
+    //     'cc_saved_appointment', 'cc_schedule', 'cc_selected_slot', 'cc_visit_type_title'
+    // ];
+    // storageKeys.forEach((storageKey) => { sessionStorage.removeItem(storageKey); });
+// }
