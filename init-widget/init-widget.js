@@ -218,5 +218,8 @@ function createWidget(widgetUrl) {
 }
 
 function removeWidget() {
-    document.getElementById(WIDGET_ID).remove();
+    // document.getElementById(WIDGET_ID).remove();
+    let widgetPlaceHolderElement = document.getElementById('careclues_widget_container');
+    widgetPlaceHolderElement.innerHTML = "";
+    localStorage.clear();
 }
