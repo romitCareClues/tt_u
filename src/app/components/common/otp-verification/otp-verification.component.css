@@ -7,7 +7,8 @@ h4 {
 }
 .widget-otp-area input {
     height: 41px;
-    width: 15.10%;
+    /*width: 15.10%;*/
+    width: 15%;
     display: block;
     border-radius: 2px;
     border: 1px solid #c5c5c5;
@@ -15,7 +16,7 @@ h4 {
     padding: 0;
     margin: 0 auto;
     font-size: 22px !important;
-    padding-left: 15px;
+    /*padding-left: 15px;*/
     float: left;
     margin-right: 8px;
 }
@@ -25,6 +26,11 @@ h4 {
     line-height: 1.3em;
     padding: 0 0 15px 0;
 }
+.widget-get-otp-button {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
 .widget-get-otp-button .appoinment-btn {
     height: 41px;
     border-radius: 3px;
@@ -33,6 +39,7 @@ h4 {
     position: relative;
     outline: 0;
     cursor: pointer;
+    margin-right: 10px;
 }
 .widget-get-otp-button .verify-btn {
     height: 41px;
@@ -45,16 +52,23 @@ h4 {
     position: relative;
     outline: 0;
     cursor: pointer;
+    margin-right: 10px;
 }
 .widget-get-otp-button .verify-btn[disabled] {
     background-color: #c5c5c5;
     cursor: not-allowed;
 }
+.widget-get-otp-button .alert {
+    padding: 10px 15px 10px 15px;
+    flex-grow: 1;
+    min-height: 26px;
+    max-width: calc(100% - 200px);
+}
 .widget-otp-alert .alert {
     margin: 0;
     padding: 9px;
 }
-@media only screen and (min-width:320px) and (max-width:768px) {
+@media only screen and (min-width:320px) and (max-width:768.98px) {
     .widget-otp-alert,
     .CC_otp-section-area {
         padding-left: 0;
@@ -70,5 +84,32 @@ h4 {
     }
     .widget-otp-alert {
         padding-top: 15px;
+    }
+    .widget-get-otp-button {
+        display: block;
+    }
+    .widget-get-otp-button .button-area {
+        display: block;
+        min-height: 50px;
+    }
+    .widget-get-otp-button .alert {
+        max-width: 100%;
+        display: block;
+    }
+}
+@media only screen and (min-width:769px) and (max-width:1199.98px) {
+    .widget-otp-area input {
+        width: 14%;
+    }
+}
+@media only screen and (min-width:769px) and (max-width:991px) {
+    .widget-get-otp-button .appoinment-btn {
+        font-size: 14px;
+    }
+    .widget-get-otp-button .verify-btn {
+        font-size: 14px;
+    }
+    .widget-otp-alert .alert {
+        font-size: 12px;
     }
 }

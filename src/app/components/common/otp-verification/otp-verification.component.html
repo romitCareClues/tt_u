@@ -11,20 +11,17 @@
 			<input type="number" tabindex="5" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_5">
 			<input type="number" tabindex="6" (keyup)="onOtpFormNavigate($event)" formControlName="otp_slice_6">
 		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 CC_no-padding widget-get-otp-button"
-			*ngIf='!otpVerificationSuccess'>
-			<button class="appoinment-btn btn pull-left" type="button" (click)="onCancel()">{{labels.cancel_button}}<i
-					class="fa fa-angle-left icon-left" aria-hidden="true"></i></button>
-			<button class="verify-btn btn pull-right" [disabled]="!otpVerificationForm.valid"
-				type="submit">{{labels.verify_button}}<i class="fa fa-angle-right icon-right"
-					aria-hidden="true"></i></button>
-		</div>
-		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 widget-otp-alert">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_no-padding widget-get-otp-button" *ngIf='!otpVerificationSuccess'>
+			<div class="button-area">
+				<button class="appoinment-btn btn pull-left" type="button" (click)="onCancel()">{{labels.cancel_button}}<i class="fa fa-angle-left icon-left" aria-hidden="true"></i></button>
+				<button class="verify-btn btn pull-left" [disabled]="!otpVerificationForm.valid" type="submit">{{labels.verify_button}}<i class="fa fa-angle-right icon-right" aria-hidden="true"></i></button>
+			</div>
+		<!-- </div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 widget-otp-alert"> -->
 			<div class="alert alert-danger text-center" *ngIf="isOtpVerificationFormValid()">
 				{{errorMessages.validation.generic}}
 			</div>
-			<div class="alert alert-danger text-center"
-				*ngIf="otpVerificationServiceError && otpVerificationForm.valid">
+			<div class="alert alert-danger text-center" *ngIf="otpVerificationServiceError && otpVerificationForm.valid">
 				{{otpVerificationServiceError}}
 			</div>
 			<div class="alert alert-danger text-center" *ngIf="!grantUserAccess && otpVerificationForm.valid">
