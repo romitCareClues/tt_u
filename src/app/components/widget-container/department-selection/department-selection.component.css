@@ -1,9 +1,9 @@
 @import '~ngx-bootstrap/datepicker/bs-datepicker.css';
 .CC_department-date-area {
     background-color: #f5f5f5;
-    padding-top: 0;
+    padding: 0;
     padding-bottom: 15px;
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 .CC_department-area .mat-form-field-infix {
     border: 2px solid #000;
