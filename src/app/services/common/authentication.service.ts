@@ -22,4 +22,16 @@ export class AuthenticationService {
     return this.apiService.post(endPoint, isPublic, '', '', requestData);//.pipe(map((response) => response.data))
   }
 
+  getParsedUserRole(apiResponse: any): string {
+    let userRole: string = null;
+    if (apiResponse.hasOwnProperty('meta')) {
+      userRole = apiResponse.meta.hasOwnProperty('type') ? apiResponse.meta.type.toLowerCase().trim() : null;
+    }
+    return userRole;
+  }
+
+  isUserRoleAllowed(userRole: string, allowedRoles: string[]): boolean {
+    return allowedRoles.includes(userRole);
+  }
+
 }
