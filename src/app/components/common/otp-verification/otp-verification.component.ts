@@ -21,6 +21,7 @@ export class OtpVerificationComponent implements OnInit {
   labels: any;
   errorMessages: any;
 
+  grantUserAccess: boolean = true;
   otpVerificationSuccess: boolean;
 
   constructor(
@@ -71,6 +72,7 @@ export class OtpVerificationComponent implements OnInit {
 
   resetOtpVerificationServiceErrorMessage(): void {
     this.otpVerificationServiceError = '';
+    this.grantUserAccess = true;
   }
 
 
@@ -79,6 +81,7 @@ export class OtpVerificationComponent implements OnInit {
   }
 
   onVerifyOtp(): void {
+    this.grantUserAccess = true;
     this.otpVerificationSuccess = false;
 
     let otpSlice1: string = this.otpVerificationForm.get('otp_slice_1').value.toString();
@@ -92,15 +95,31 @@ export class OtpVerificationComponent implements OnInit {
     let otpToVerificationRequest = { 'mobile_number': this.mobile, 'otp': fullOtpCode };
     this.authService.verifyOtp(otpToVerificationRequest).subscribe(
       (successResponse) => {
-        localStorage.setItem('cc_patient_id', successResponse.data.id);
-        this.onOtpVerified.emit();
-        this.otpVerificationSuccess = true;
+        if (this.canUserBookAppointment(successResponse)) {
+          localStorage.setItem('cc_patient_id', successResponse.data.id);
+          this.onOtpVerified.emit();
+          this.otpVerificationSuccess = true;
+        }
+        else {
+          this.grantUserAccess = false;
+        }
       },
       (errorResponse) => {
         this.displayOtpVerificationError(errorResponse);
         this.otpVerificationSuccess = false;
+        this.grantUserAccess = true;
       }
     );
+  }
+
+  canUserBookAppointment(otpVerificationResponse): boolean {
+    let status: boolean = false;
+    let userRole: string = this.authService.getParsedUserRole(otpVerificationResponse);
+    if (userRole) {
+      let allowedRoles: string[] = ['patient', 'patientdependant'];
+      status = allowedRoles.includes(userRole);
+    }
+    return status;
   }
 
   // focus on respective otp slice input when user navigates using keyborad
