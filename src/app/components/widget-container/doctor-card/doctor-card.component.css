@@ -49,6 +49,8 @@
 .CC_doc-book-slot {
     display: inline-block;
     padding-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
 }
 .CC_book-slot {
     background-color: #d31c5b;
