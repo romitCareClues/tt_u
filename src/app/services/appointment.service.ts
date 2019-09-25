@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './common/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 // @Injectable({
 //   providedIn: 'root'
@@ -33,5 +34,18 @@ export class AppointmentService {
     let endPoint: string = `slots/${slot.id}/buckets?${requestParams}`;
     let isPublic: boolean = true;
     return this.apiService.get(endPoint, isPublic);
+  }
+
+  getAppointmentBookingErrorMessage(errorResponse: HttpErrorResponse): string {
+    let parsedMessage: string = null;
+    if (errorResponse.hasOwnProperty('error')) {
+      let errorResponseBody: any = JSON.parse(JSON.stringify(errorResponse.error));
+      if (errorResponseBody.hasOwnProperty('errors')) {
+        if (errorResponseBody.errors.hasOwnProperty('clinic_consultation')) {
+          parsedMessage = errorResponseBody.errors.clinic_consultation.full_messages.shift().message;
+        }
+      }
+    }
+    return parsedMessage;
   }
 }

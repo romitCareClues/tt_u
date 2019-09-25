@@ -28,3 +28,12 @@
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
     color:#d3145a !important;
 }
+
+.red-snackbar {
+    color: #a94442;
+    background: #f2dede;
+}
+
+.red-snackbar .mat-simple-snackbar-action {
+    color: #a94442;
+}
