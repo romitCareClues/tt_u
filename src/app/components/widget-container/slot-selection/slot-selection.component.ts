@@ -209,7 +209,9 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
         }
 
         this.parseAndSetBuckets(bucketsResponse);
-        this.navigateToNextPageBuckets(slot, successResponse.meta);
+        if (responseRecordCount > 0) {
+          this.navigateToNextPageBuckets(slot, successResponse.meta);
+        }
       },
       (error) => {
 
