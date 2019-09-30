@@ -48,6 +48,10 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   slotBasedRecordsCount: any = null;
 
+  scheduleLoaded: boolean = false;
+  scheduleSlotsLoaded: boolean = false;
+  slotBucketsLoaded: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -55,7 +59,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService
   ) {
     this.visitTypes = Object.create(CONSULTATION_VISIT_TYPES);
-    this.scheduleSlots = [];
+    // this.scheduleSlots = [];
     this.buckets = [];
     this.displayLabel = LABEL_TEXTS.slot_selection;
     this.validationMessages = ERROR_MESSAGES.slot_selection.message.validation;
@@ -87,6 +91,10 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.displayLabel = null;
     this.validationMessages = null;
     this.selectedDate = null;
+
+    this.scheduleLoaded = false;
+    this.scheduleSlotsLoaded = false;
+    this.slotBucketsLoaded = false;
   }
 
   extractAndSetRouteParams(): void {
@@ -116,14 +124,16 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   getClinicSchedules(): void {
+    this.scheduleLoaded = false;
     this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
       (successResponse: any[]) => {
+        this.scheduleLoaded = true;
         this.schedule = successResponse.length > 0 ? successResponse.shift() : null;
         localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
         this.getScheduleSlots();
       },
       (errorResponse) => {
-
+        this.scheduleLoaded = true;
       },
     );
   }
@@ -145,20 +155,25 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   getScheduleSlots(): void {
-    this.buckets = this.scheduleSlots = [];
+    // this.buckets = this.scheduleSlots = [];
+    this.buckets = [];
+    this.scheduleSlots = null;
     this.slotBasedRecordsCount = null;
+    this.scheduleSlotsLoaded = false;
     if (this.schedule !== null && typeof this.schedule !== 'undefined') {
       this.buckets = [];
       this.prepareScheduleSlotRequestQuery();
       let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString());
       this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
         (successResponse) => {
+          this.scheduleSlotsLoaded = true;
           this.scheduleSlots = successResponse;
           this.serverRespondedForSlotListing = true;
           this.fetchAllSlotBuckets();
         },
         (errorResponse) => {
           this.serverRespondedForSlotListing = true;
+          this.scheduleSlotsLoaded = true;
         }
       );
     }
@@ -193,9 +208,11 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   fetchSlotBuckets(slot: any, customizedQueryParams: string = null): void {
+    this.slotBucketsLoaded = false;
     let requestParams: string = customizedQueryParams ? customizedQueryParams : decodeURI(this.scheduleSlotRequestQuery.toString());
     this.appointmentService.getSlotBuckets(slot, requestParams).subscribe(
       (successResponse) => {
+        this.slotBucketsLoaded = true;
         let bucketsResponse: any[] = successResponse.data;
         let responseRecordCount = bucketsResponse.length;
 
@@ -214,7 +231,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
         }
       },
       (error) => {
-
+        this.slotBucketsLoaded = true;
       }
     );
   }
