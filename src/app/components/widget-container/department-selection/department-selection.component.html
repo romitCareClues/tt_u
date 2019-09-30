@@ -9,7 +9,7 @@
 			<form>
 				<mat-form-field class="CC_doc-search">
 					<input type="text" aria-label="Number" matInput [formControl]="searcDoctorControl"
-						[matAutocomplete]="auto" (input)="onSearch()">
+						[matAutocomplete]="auto">
 					<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 						<mat-option *ngFor="let doctor of doctorSearchResult" [value]="getDoctorDisplayName(doctor)"
 							(click)='onDoctorSelect(doctor)'>
