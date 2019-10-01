@@ -317,7 +317,6 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   onSlotSelect(bucket: any): void {
-    this.cancelExistingSubscriptions();
     this.selectedSlot = bucket;
     localStorage.setItem('cc_selected_slot', JSON.stringify(bucket));
   }
