@@ -12,6 +12,8 @@ import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { LoaderService } from '../../../services/common/loader.service';
 
 @Component({
   selector: 'app-slot-selection',
@@ -40,7 +42,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   scheduleSlotRequestQuery: HttpParams;
   selectedDate: string;
-  selectedSlot: any;
+  selectedSlot: any = null;
   currentDate: string;
 
   referer: string;
@@ -52,14 +54,17 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   scheduleSlotsLoaded: boolean = false;
   slotBucketsLoaded: boolean = false;
 
+  allSubscriptions: any[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private appointmentService: AppointmentService,
-    private doctorService: DoctorService
+    private doctorService: DoctorService,
+    private loaderService: LoaderService
   ) {
     this.visitTypes = Object.create(CONSULTATION_VISIT_TYPES);
-    // this.scheduleSlots = [];
+    this.scheduleSlots = null;
     this.buckets = [];
     this.displayLabel = LABEL_TEXTS.slot_selection;
     this.validationMessages = ERROR_MESSAGES.slot_selection.message.validation;
@@ -104,17 +109,20 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   fetchDoctor(): void {
+    this.selectedSlot = null;
     let requestParam: string = `expand=schedules,qualifications,reviews_count,specializations`;
-    this.doctorService.fetchClinicDoctorBySlug(this.doctorSlug, requestParam).subscribe(
-      (successResponse) => {
-        this.setDoctor(successResponse.data);
-        this.getVisitTypes();
-        this.getClinicSchedules();
-      },
-      (errorResponse) => {
+    this.allSubscriptions.push(
+      this.doctorService.fetchClinicDoctorBySlug(this.doctorSlug, requestParam).subscribe(
+        (successResponse) => {
+          this.setDoctor(successResponse.data);
+          this.getVisitTypes();
+          this.getClinicSchedules();
+        },
+        (errorResponse) => {
 
-      }
-    );
+        }
+      )
+    )
   }
 
   setDoctor(data: any): void {
@@ -124,30 +132,42 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   getClinicSchedules(): void {
+    this.selectedSlot = null;
     this.scheduleLoaded = false;
-    this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
-      (successResponse: any[]) => {
-        this.scheduleLoaded = true;
-        this.schedule = successResponse.length > 0 ? successResponse.shift() : null;
-        localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
-        this.getScheduleSlots();
-      },
-      (errorResponse) => {
-        this.scheduleLoaded = true;
-      },
-    );
+
+    this.slotBucketsLoaded = false;
+    this.scheduleSlotsLoaded = false;
+    this.scheduleSlots = null;
+
+    this.allSubscriptions.push(
+      this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
+        (successResponse: any[]) => {
+          this.scheduleLoaded = true;
+          this.schedule = successResponse.length > 0 ? successResponse.shift() : null;
+          localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
+          this.getScheduleSlots();
+        },
+        (errorResponse) => {
+          this.scheduleLoaded = true;
+        },
+      )
+    )
   }
 
   getVisitTypes(): void {
+    this.selectedSlot = null;
     let requestParams: string = `facility_id=${this.clinicId}&expand=generic_treatment_plan`;
-    this.appointmentService.fetchAppointmentVisitTypes(this.doctorId, requestParams).subscribe(
-      (successResponse) => {
-        this.updateAppointVisitTypes(successResponse);
-      },
-      (errorResponse) => {
 
-      },
-    );
+    this.allSubscriptions.push(
+      this.appointmentService.fetchAppointmentVisitTypes(this.doctorId, requestParams).subscribe(
+        (successResponse) => {
+          this.updateAppointVisitTypes(successResponse);
+        },
+        (errorResponse) => {
+
+        },
+      )
+    )
   }
 
   updateAppointVisitTypes(data: any): void {
@@ -155,27 +175,34 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   getScheduleSlots(): void {
+    this.selectedSlot = null;
     // this.buckets = this.scheduleSlots = [];
     this.buckets = [];
     this.scheduleSlots = null;
     this.slotBasedRecordsCount = null;
     this.scheduleSlotsLoaded = false;
+
+    this.slotBucketsLoaded = false;
+
     if (this.schedule !== null && typeof this.schedule !== 'undefined') {
       this.buckets = [];
       this.prepareScheduleSlotRequestQuery();
       let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString());
-      this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
-        (successResponse) => {
-          this.scheduleSlotsLoaded = true;
-          this.scheduleSlots = successResponse;
-          this.serverRespondedForSlotListing = true;
-          this.fetchAllSlotBuckets();
-        },
-        (errorResponse) => {
-          this.serverRespondedForSlotListing = true;
-          this.scheduleSlotsLoaded = true;
-        }
-      );
+
+      this.allSubscriptions.push(
+        this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
+          (successResponse) => {
+            this.scheduleSlotsLoaded = true;
+            this.scheduleSlots = successResponse;
+            this.serverRespondedForSlotListing = true;
+            this.fetchAllSlotBuckets();
+          },
+          (errorResponse) => {
+            this.serverRespondedForSlotListing = true;
+            this.scheduleSlotsLoaded = true;
+          }
+        )
+      )
     }
   }
 
@@ -208,31 +235,38 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   fetchSlotBuckets(slot: any, customizedQueryParams: string = null): void {
+    this.selectedSlot = null;
     this.slotBucketsLoaded = false;
+    this.scheduleSlotsLoaded = false;
+    this.scheduleSlots = null;
+
     let requestParams: string = customizedQueryParams ? customizedQueryParams : decodeURI(this.scheduleSlotRequestQuery.toString());
-    this.appointmentService.getSlotBuckets(slot, requestParams).subscribe(
-      (successResponse) => {
-        this.slotBucketsLoaded = true;
-        let bucketsResponse: any[] = successResponse.data;
-        let responseRecordCount = bucketsResponse.length;
 
-        if (!this.slotBasedRecordsCount) {
-          this.slotBasedRecordsCount = { [slot.id]: responseRecordCount }
-        }
-        else {
-          this.slotBasedRecordsCount[slot.id] = isNaN(this.slotBasedRecordsCount[slot.id]) ?
-            responseRecordCount :
-            (this.slotBasedRecordsCount[slot.id] + responseRecordCount);
-        }
+    this.allSubscriptions.push(
+      this.appointmentService.getSlotBuckets(slot, requestParams).subscribe(
+        (successResponse) => {
+          this.slotBucketsLoaded = true;
+          let bucketsResponse: any[] = successResponse.data;
+          let responseRecordCount = bucketsResponse.length;
 
-        this.parseAndSetBuckets(bucketsResponse);
-        if (responseRecordCount > 0) {
-          this.navigateToNextPageBuckets(slot, successResponse.meta);
+          if (!this.slotBasedRecordsCount) {
+            this.slotBasedRecordsCount = { [slot.id]: responseRecordCount }
+          }
+          else {
+            this.slotBasedRecordsCount[slot.id] = isNaN(this.slotBasedRecordsCount[slot.id]) ?
+              responseRecordCount :
+              (this.slotBasedRecordsCount[slot.id] + responseRecordCount);
+          }
+
+          this.parseAndSetBuckets(bucketsResponse);
+          if (responseRecordCount > 0) {
+            this.navigateToNextPageBuckets(slot, successResponse.meta);
+          }
+        },
+        (error) => {
+          this.slotBucketsLoaded = true;
         }
-      },
-      (error) => {
-        this.slotBucketsLoaded = true;
-      }
+      )
     );
   }
 
@@ -288,17 +322,20 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   onAppointmentDateChange(date: MatDatepickerInputEvent<Date>): void {
+    this.cancelExistingSubscriptions();
     this.selectedDate = moment(this.appointmentDateSelectControl.value).format('YYYY-MM-DD');
     this.getClinicSchedules();
     this.saveSelectedDateLocally();
   }
 
   onVisitTypeChange(): void {
+    this.cancelExistingSubscriptions();
     this.saveSelectedVisitTypeLocally();
     this.getClinicSchedules();
   }
 
   onProceedClick(): void {
+    this.cancelExistingSubscriptions();
     this.router.navigate(['/booking-verification', this.clinicSlug]);
   }
 
@@ -310,7 +347,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   isFormValid(): boolean {
-    return typeof this.selectedSlot !== 'undefined';
+    return this.selectedSlot ? true : false;
   }
 
   searchVisitTypeById(searchId: any): any {
@@ -344,6 +381,13 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   getFormattedDate(date: any, format: string): string {
     return moment(date).format(format);
+  }
+
+  cancelExistingSubscriptions(): void {
+    this.loaderService.hideLoader();
+    this.allSubscriptions.map((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
 }
