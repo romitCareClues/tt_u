@@ -79,7 +79,7 @@ export class DepartmentSelectionComponent implements OnInit {
       this.searchFilters = new HttpParams().set('facility_id', this.clinicId.toString())
         .set('filter[public_profile]', 'true')
         .set('expand', 'schedules,qualifications,reviews_count,specializations')
-        .set('query', searchQuery)
+        .set('query[full_name]', searchQuery)
         .set('widget', 'true')
         .set('optimize', 'true')
         .set('date', this.currentDate)
