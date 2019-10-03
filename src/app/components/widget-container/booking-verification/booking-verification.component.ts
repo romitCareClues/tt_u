@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LABEL_TEXTS } from '../../../template-data';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { AppointmentService } from '../../../services/appointment.service';
+import { NotificationService } from '../../../services/common/notification.service';
 
 @Component({
   selector: 'app-booking-verification',
@@ -23,7 +24,8 @@ export class BookingVerificationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private notificationService: NotificationService
   ) {
     this.labels = LABEL_TEXTS.booking_verification;
     this.schedule = JSON.parse(localStorage.getItem('cc_schedule'));
@@ -73,9 +75,29 @@ export class BookingVerificationComponent implements OnInit {
         this.router.navigate(['/booking-success', this.clinicSlug]);
       },
       (errorResponse) => {
-        console.log(errorResponse);
+        this.handleAppointmentBookingError(errorResponse);
+        this.redirectToSlotSelection();
       }
     );
+  }
+
+  handleAppointmentBookingError(errorResponse: HttpErrorResponse): void {
+    let parsedServerErrorMessage: string = this.appointmentService.getAppointmentBookingErrorMessage(errorResponse);
+    let messageToDisplay: string = parsedServerErrorMessage ? parsedServerErrorMessage : 'Error Occurred';
+    let notificationActionText: string = 'Close';
+    let errorMessageOptions: any = { duration: 3000, panelClass: ['red-snackbar'], verticalPosition: 'top' }
+    this.notificationService.displayToast(messageToDisplay, notificationActionText, errorMessageOptions);
+  }
+
+  redirectToSlotSelection(): void {
+    let clinicSlug: string = localStorage.getItem('cc_clinic_slug');
+    let selectedPhysician: any = JSON.parse(localStorage.getItem('cc_doctor'));
+    if (selectedPhysician.hasOwnProperty('uri')) {
+      this.router.navigate(['/slot-selection', clinicSlug, selectedPhysician.uri], { queryParams: { referer: '_doctor_card' } });
+    }
+    else {
+      this.router.navigate(['/department-selection', clinicSlug]);
+    }
   }
 
 }
