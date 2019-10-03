@@ -25,7 +25,8 @@ import {
   MatInputModule,
   // MatButtonModule,
   MatAutocompleteModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 // component imports
@@ -83,7 +84,8 @@ import {
     MatNativeDateModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

@@ -9,6 +9,8 @@ import { DoctorService } from '../../../services/doctor.service';
 
 import * as moment from 'moment';
 
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+
 @Component({
   selector: 'app-department-selection',
   templateUrl: './department-selection.component.html',
@@ -45,12 +47,23 @@ export class DepartmentSelectionComponent implements OnInit {
   ngOnInit() {
     this.extractAndSetRouteParams();
     this.searcDoctorControl = new FormControl();
+    this.attachSearchControlCallback();
   }
 
   extractAndSetRouteParams(): void {
     // this.clinicId = +this.route.snapshot.paramMap.get('clinicId');
     this.clinicId = +localStorage.getItem('cc_clinic_id');
     this.clinicSlug = this.route.snapshot.paramMap.get('clinicSlug');
+  }
+
+  attachSearchControlCallback(): void {
+    this.searcDoctorControl.valueChanges
+      .pipe(
+        debounceTime(500)
+      )
+      .subscribe(() => {
+        this.onSearch();
+      });
   }
 
   onSearch(): void {
@@ -60,29 +73,37 @@ export class DepartmentSelectionComponent implements OnInit {
   }
 
   prepareSearchRequestQuery(): void {
-    let searchQuery: string = typeof this.searchQuery !== 'undefined' ? `${this.searchQuery}*` : '*';
-    this.searchFilters = new HttpParams().set('facility_id', this.clinicId.toString())
-      .set('filter[public_profile]', 'true')
-      .set('expand', 'schedules,qualifications,reviews_count,specializations')
-      .set('query', searchQuery)
-      .set('widget', 'true')
-      .set('optimize', 'true')
-      .set('date', this.currentDate)
-      .set('filter[facilities.available_for_booking]', 'true')
-      .set('pagination', 'false');
+    // let searchQuery: string = typeof this.searchQuery !== 'undefined' ? `${this.searchQuery}*` : '*';
+    let searchQuery: string = this.searchQuery ? `${this.searchQuery}*` : '';
+    if (searchQuery.length > 3) {
+      this.searchFilters = new HttpParams().set('facility_id', this.clinicId.toString())
+        .set('filter[public_profile]', 'true')
+        .set('expand', 'schedules,qualifications,reviews_count,specializations')
+        .set('query[full_name]', searchQuery)
+        .set('widget', 'true')
+        .set('optimize', 'true')
+        .set('date', this.currentDate)
+        .set('filter[facilities.available_for_booking]', 'true')
+        .set('pagination', 'false');
+    }
+    else {
+      this.searchFilters = null;
+    }
   }
 
   getClinicDoctors(): void {
     this.doctorSearchResult = [];
-    let searchQueryString: string = decodeURI(this.searchFilters.toString());
-    this.doctorService.fetchClinicDoctorList(searchQueryString).subscribe(
-      (successResponse) => {
-        this.doctorSearchResult = successResponse.data;
-      },
-      (errorResponse) => {
-        this.doctorSearchResult = [];
-      }
-    );
+    if (this.searchFilters) {
+      let searchQueryString: string = decodeURI(this.searchFilters.toString());
+      this.doctorService.fetchClinicDoctorList(searchQueryString).subscribe(
+        (successResponse) => {
+          this.doctorSearchResult = successResponse.data;
+        },
+        (errorResponse) => {
+          this.doctorSearchResult = [];
+        }
+      );
+    }
   }
 
   getDoctorDisplayName(doctor: any): string {

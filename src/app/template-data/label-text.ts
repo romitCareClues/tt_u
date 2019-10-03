@@ -13,6 +13,7 @@ export const LABEL_TEXTS = {
         date_selection: 'Select Date',
         slot_selection: 'Pick a time slot',
         proceed_button: 'Proceed',
+        no_schedule_available: 'No schedule available. Please select another physician.',
         no_slot_available: 'No slots available. Please select another date.'
     },
     send_otp: {
