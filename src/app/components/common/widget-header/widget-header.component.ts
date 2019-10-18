@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { CustomRouteService } from '../../../services/common/custom-route.service';
-import { CONFIGS } from '../../../../configurations';
+import { CONFIGS, FILE_PATHS } from '../../../../configurations';
 
 @Component({
   selector: 'app-widget-header',
@@ -15,6 +15,7 @@ export class WidgetHeaderComponent implements OnInit {
   routeListToHideBackButton: string[];
 
   referer: string;
+  logoUrl: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +24,7 @@ export class WidgetHeaderComponent implements OnInit {
     private router: Router
   ) {
     this.routeListToHideBackButton = CONFIGS.hideBackButtonForRoutes;
+    this.logoUrl = FILE_PATHS.cdn_images.logo_image;
   }
 
   ngOnInit() {

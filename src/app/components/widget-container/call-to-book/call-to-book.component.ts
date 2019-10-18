@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LABEL_TEXTS, ERROR_MESSAGES } from '../../../../app/template-data';
 
 import { DoctorService } from '../../../services/doctor.service';
+import { NotificationService } from '../../../services/common/notification.service';
 
 @Component({
   selector: 'app-call-to-book',
@@ -19,7 +20,11 @@ export class CallToBookComponent implements OnInit {
 
   disableCallToBookButton: boolean;
 
-  constructor(private doctorService: DoctorService) {
+  enableButtonEnableTimer: boolean;
+  secondsCount: number;
+  secondsCountTimer: any;
+
+  constructor(private doctorService: DoctorService, private notificationService: NotificationService) {
     this.displayLabel = LABEL_TEXTS.call_to_book;
     this.validationMessages = ERROR_MESSAGES.call_to_book.message.validation;
     this.createCallToBookForm();
@@ -46,7 +51,25 @@ export class CallToBookComponent implements OnInit {
   }
 
   onCallToBookFormSubmit(): void {
+    this.enableCallButtonAfterSetTime();
+    this.proceedToCall();
+  }
+
+  enableCallButtonAfterSetTime(): void {
     this.disableCallToBookButton = true;
+    this.enableButtonEnableTimer = true;
+    this.secondsCount = 60;
+    this.secondsCountTimer = setInterval(() => {
+      this.secondsCount--;
+      if (this.secondsCount == 0) {
+        clearInterval(this.secondsCountTimer);
+        this.enableButtonEnableTimer = false;
+        this.disableCallToBookButton = false;
+      }
+    }, 1000);
+  }
+
+  proceedToCall(): void {
     let clinicId: number = +localStorage.getItem('cc_clinic_id');
     let countryIdPrefixedMobile: string = `+91${this.callToBookForm.value.mobileNumberControl}`;
     let requestParam: any = {
@@ -55,12 +78,27 @@ export class CallToBookComponent implements OnInit {
     }
     this.doctorService.callDoctorToBook(clinicId, requestParam).subscribe(
       (successResponse) => {
-        console.log(successResponse);
+        // this.disableCallToBookButton = false;
       },
       (errorResponse) => {
-        console.log(errorResponse);
+        this.handleError();
+        // this.disableCallToBookButton = false;
       }
     );
+  }
+
+  handleError(): void {
+    clearInterval(this.secondsCountTimer);
+    this.enableButtonEnableTimer = false;
+    this.disableCallToBookButton = false;
+    this.notifyErrorMessage();
+  }
+
+  notifyErrorMessage(): void {
+    let messageToDisplay: string = 'We are facing some technical issue while calling. Please call directly to the mentioned number.';
+    let notificationActionText: string = 'Close';
+    let errorMessageOptions: any = { duration: 3000, panelClass: ['red-snackbar'], verticalPosition: 'top' }
+    this.notificationService.displayToast(messageToDisplay, notificationActionText, errorMessageOptions);
   }
 
 }
