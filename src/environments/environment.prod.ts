@@ -8,4 +8,6 @@ export const environment = {
   api_version: 'api/v1',
   api_url: function () { return `${this.base_url}/${this.api_version}/` },
   public_url: function () { return `${this.base_url}/${this.api_version}/public/` },
+  cdn_base_url: "https://careclues.imgix.net",
+  asset_url: function () { return `${this.cdn_base_url}/assets` }
 };

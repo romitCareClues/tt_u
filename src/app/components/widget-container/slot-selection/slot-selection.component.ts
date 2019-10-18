@@ -56,6 +56,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   allSubscriptions: any[] = [];
 
+  callToBookFormDisplayStatus: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -110,13 +112,19 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   fetchDoctor(): void {
     this.selectedSlot = null;
-    let requestParam: string = `expand=schedules,qualifications,reviews_count,specializations`;
+    let requestParam: string = `facility_id=${this.clinicId}&widget=true&expand=schedules,qualifications,reviews_count,specializations`;
     this.allSubscriptions.push(
       this.doctorService.fetchClinicDoctorBySlug(this.doctorSlug, requestParam).subscribe(
         (successResponse) => {
-          this.setDoctor(successResponse.data);
-          this.getVisitTypes();
-          this.getClinicSchedules();
+          let doctorModel: any = successResponse.data;
+          this.setDoctor(doctorModel);
+          if (this.doctorService.isOnlineAppointmentAllowed(doctorModel)) {
+            this.getVisitTypes();
+            this.getClinicSchedules();
+          }
+          else {
+            this.callToBookFormDisplayStatus = true;
+          }
         },
         (errorResponse) => {
 
