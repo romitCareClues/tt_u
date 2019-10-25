@@ -7,7 +7,8 @@
 	<span class="close-frame">X</span-->
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 widget-book-appoinment-title">
 		<div class="cols" *ngIf="canDisplayBackButton()">
-			<a [href]="" class='header-back-button'><i class="glyphicon glyphicon-menu-left" (click)="onBackButtonClicked()"></i></a>
+			<a [href]="" class='header-back-button'><i class="glyphicon glyphicon-menu-left"
+					(click)="onBackButtonClicked()"></i></a>
 		</div>
 		<div class="cols" (click)="onAppointmentTitleClick()">
 			<span>Book an Appointment</span>
@@ -16,6 +17,6 @@
 	</div>
 	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right widget-book-appoinment-powered">
 		<span>Powered by</span>
-		<span><img src="https://careclues.com/assets/img/logo-color.svg" alt="CareClues"></span>
+		<span><img src="{{logoUrl}}" alt="CareClues"></span>
 	</div>
 </div>
