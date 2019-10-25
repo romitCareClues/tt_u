@@ -35,4 +35,16 @@ export class DoctorService {
     return this.apiService.get(endPoint, isPublic).pipe(map((response) => response.data));
   }
 
+  isOnlineAppointmentAllowed(doctor: any): boolean {
+    if (doctor.hasOwnProperty('public_phone_available') && doctor.hasOwnProperty('available_for_booking')) {
+      return doctor.available_for_booking === true;
+    }
+    else if (doctor.hasOwnProperty('public_phone_available') && !doctor.hasOwnProperty('available_for_booking')) {
+      return !(doctor.public_phone_available === true);
+    }
+    else {
+      return true;
+    }
+  }
+
 }
