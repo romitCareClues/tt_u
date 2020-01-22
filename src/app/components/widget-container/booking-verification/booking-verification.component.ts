@@ -21,6 +21,8 @@ export class BookingVerificationComponent implements OnInit {
 
   labels: any;
 
+  slotTreatmentPlan: any = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -29,6 +31,7 @@ export class BookingVerificationComponent implements OnInit {
   ) {
     this.labels = LABEL_TEXTS.booking_verification;
     this.schedule = JSON.parse(localStorage.getItem('cc_schedule'));
+    this.slotTreatmentPlan = JSON.parse(localStorage.getItem('cc_slot_treatment_plan'));
     this.disableAppointBookingButton = true;
   }
 

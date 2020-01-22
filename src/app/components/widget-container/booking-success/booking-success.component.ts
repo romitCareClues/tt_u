@@ -15,12 +15,15 @@ export class BookingSuccessComponent implements OnInit {
   schedule: any;
   labels: any;
 
+  slotTreatmentPlan: any = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
   ) {
     this.savedAppointment = JSON.parse(localStorage.getItem('cc_saved_appointment'));
     this.schedule = JSON.parse(localStorage.getItem('cc_schedule'));
+    this.slotTreatmentPlan = JSON.parse(localStorage.getItem('cc_slot_treatment_plan'));
     this.labels = LABEL_TEXTS.booking_success;
   }
 

@@ -9,10 +9,11 @@
 		<h4 class="CC_no-padding-left">Your Payables</h4>
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 CC_payables-row">
 			<span class="CC_doc-fees">Doctor Fees</span>
-			<span class="CC_fees-amount">{{schedule?.gross_amount | currency:'INR' : 'symbol' : '1.0'}}</span>
+			<span class="CC_fees-amount">{{slotTreatmentPlan?.gross_amount | currency:'INR' : 'symbol' : '1.0'}}</span>
 		</div>
 	</div>
 	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 CC_btn-proceed gap-up text-right right-area">
-		<button class="btn booking-verification-button" [disabled]="disableAppointBookingButton" (click)="onBookAppointmentClick()">{{labels.proceed_button}}</button>
+		<button class="btn booking-verification-button" [disabled]="disableAppointBookingButton"
+			(click)="onBookAppointmentClick()">{{labels.proceed_button}}</button>
 	</div>
 </div>
