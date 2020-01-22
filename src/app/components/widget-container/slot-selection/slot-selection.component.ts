@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { LABEL_TEXTS, ERROR_MESSAGES } from '../../../../app/template-data';
-import { ENUM_CONFIGURATIONS } from '../../../../configurations';
+// import { ENUM_CONFIGURATIONS } from '../../../../configurations';
 
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CustomErrorStateMatcher } from '../../../validators';
-import { CONSULTATION_VISIT_TYPES } from '../../../static_data';
+// import { CONSULTATION_VISIT_TYPES } from '../../../static_data';
 
 import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorService } from '../../../services/doctor.service';
@@ -32,11 +32,11 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   doctor: any;
   schedule: any;
-  visitTypes: any[];
+  treatmentPlans: any[];
   scheduleSlots: any[];
   buckets: any[];
 
-  visitTypeSelectControl: FormControl;
+  treatmentPlansSelectControl: FormControl;
   visitTypeSelectErrorMatcher: CustomErrorStateMatcher;
   appointmentDateSelectControl: FormControl;
 
@@ -58,6 +58,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   callToBookFormDisplayStatus: boolean;
 
+  slotTreatmentPlan: any = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -65,7 +67,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService,
     private loaderService: LoaderService
   ) {
-    this.visitTypes = Object.create(CONSULTATION_VISIT_TYPES);
+    // ##new-schedule-module
+    // this.treatmentPlans = Object.create(CONSULTATION_VISIT_TYPES);
     this.scheduleSlots = null;
     this.buckets = [];
     this.displayLabel = LABEL_TEXTS.slot_selection;
@@ -81,11 +84,16 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
         this.selectedDate = this.getDatePreSelectValue();
       }
     );
-    this.visitTypeSelectControl = new FormControl('new_patient', [Validators.required]);
+    // ##new-schedule-module
+    // this.treatmentPlansSelectControl = new FormControl('new_patient', [Validators.required]);
+    this.treatmentPlansSelectControl = new FormControl('', [Validators.required]);
+
     this.visitTypeSelectErrorMatcher = new CustomErrorStateMatcher();
     this.appointmentDateSelectControl = new FormControl(this.selectedDate, [Validators.required]);
 
-    this.saveSelectedVisitTypeLocally();
+    // ##new-schedule-module
+    // this.saveSelectedVisitTypeLocally();
+
     this.saveSelectedDateLocally();
 
     this.extractAndSetRouteParams();
@@ -93,7 +101,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.visitTypes = null;
+    this.treatmentPlans = null;
     this.scheduleSlots = null;
     this.displayLabel = null;
     this.validationMessages = null;
@@ -102,6 +110,26 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.scheduleLoaded = false;
     this.scheduleSlotsLoaded = false;
     this.slotBucketsLoaded = false;
+  }
+
+  setDoctor(data: any): void {
+    this.doctor = data;
+    this.doctorId = data.id;
+    localStorage.setItem('cc_doctor', JSON.stringify(data));
+  }
+
+  setTreatmentPlans(data: any): void {
+    this.treatmentPlans = data;
+  }
+
+  setSchedule(data: any): void {
+    this.schedule = data;
+    localStorage.setItem('cc_schedule', JSON.stringify(data));
+  }
+
+  setSlotTreatmentPlan(data: any): void {
+    this.slotTreatmentPlan = data;
+    localStorage.setItem('cc_slot_treatment_plan', JSON.stringify(data));
   }
 
   extractAndSetRouteParams(): void {
@@ -119,8 +147,9 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
           let doctorModel: any = successResponse.data;
           this.setDoctor(doctorModel);
           if (this.doctorService.isOnlineAppointmentAllowed(doctorModel)) {
-            this.getVisitTypes();
-            this.getClinicSchedules();
+            // ##new-schedule-module
+            this.fetchPhysicianTreatmentPlans();
+            // this.getClinicSchedules();
           }
           else {
             this.callToBookFormDisplayStatus = true;
@@ -133,43 +162,19 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     )
   }
 
-  setDoctor(data: any): void {
-    this.doctor = data;
-    this.doctorId = data.id;
-    localStorage.setItem('cc_doctor', JSON.stringify(data));
-  }
-
-  getClinicSchedules(): void {
-    this.selectedSlot = null;
-    this.scheduleLoaded = false;
-
-    this.slotBucketsLoaded = false;
-    this.scheduleSlotsLoaded = false;
-    this.scheduleSlots = null;
-
-    this.allSubscriptions.push(
-      this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
-        (successResponse: any[]) => {
-          this.scheduleLoaded = true;
-          this.schedule = successResponse.length > 0 ? successResponse.shift() : null;
-          localStorage.setItem('cc_schedule', JSON.stringify(this.schedule));
-          this.getScheduleSlots();
-        },
-        (errorResponse) => {
-          this.scheduleLoaded = true;
-        },
-      )
-    )
-  }
-
-  getVisitTypes(): void {
+  fetchPhysicianTreatmentPlans(): void {
     this.selectedSlot = null;
     let requestParams: string = `facility_id=${this.clinicId}&expand=generic_treatment_plan`;
 
     this.allSubscriptions.push(
       this.appointmentService.fetchAppointmentVisitTypes(this.doctorId, requestParams).subscribe(
         (successResponse) => {
-          this.updateAppointVisitTypes(successResponse);
+          if (successResponse.length > 0) {
+            this.setTreatmentPlans(successResponse);
+            this.selectFirstTreatmentPlan();
+            this.saveSelectedVisitTypeLocally();
+            this.fetchSlotTreatmentPlans();
+          }
         },
         (errorResponse) => {
 
@@ -178,13 +183,12 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     )
   }
 
-  updateAppointVisitTypes(data: any): void {
-    data.forEach(visitType => { this.visitTypes.push(visitType); });
+  selectFirstTreatmentPlan(): void {
+    this.treatmentPlansSelectControl.setValue(this.treatmentPlans[0].id);
   }
 
-  getScheduleSlots(): void {
+  fetchSlotTreatmentPlans(): void {
     this.selectedSlot = null;
-    // this.buckets = this.scheduleSlots = [];
     this.buckets = [];
     this.scheduleSlots = null;
     this.slotBasedRecordsCount = null;
@@ -192,38 +196,26 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
     this.slotBucketsLoaded = false;
 
-    if (this.schedule !== null && typeof this.schedule !== 'undefined') {
-      this.buckets = [];
-      this.prepareScheduleSlotRequestQuery();
-      let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString());
+    this.buckets = [];
+    let treatmentPlanId: number = this.treatmentPlansSelectControl.value;
+    let requestParams: string = `date=${this.selectedDate}&physician_id=${this.doctorId}`;
 
-      this.allSubscriptions.push(
-        this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
-          (successResponse) => {
-            this.scheduleSlotsLoaded = true;
+    this.allSubscriptions.push(
+      this.appointmentService.fetchSlotTreatmentPlans(treatmentPlanId, requestParams).subscribe(
+        (successResponse) => {
+          this.scheduleSlotsLoaded = true;
+          this.serverRespondedForSlotListing = true;
+          if (successResponse.length > 0) {
             this.scheduleSlots = successResponse;
-            this.serverRespondedForSlotListing = true;
             this.fetchAllSlotBuckets();
-          },
-          (errorResponse) => {
-            this.serverRespondedForSlotListing = true;
-            this.scheduleSlotsLoaded = true;
           }
-        )
+        },
+        (errorResponse) => {
+          this.serverRespondedForSlotListing = true;
+          this.scheduleSlotsLoaded = true;
+        }
       )
-    }
-  }
-
-  prepareScheduleSlotRequestQuery(): void {
-    let appointType: string = this.visitTypeSelectControl.value;
-    let requestQuery: HttpParams = new HttpParams()
-      .set('date', this.selectedDate)
-      .set('appt_type', appointType);
-    if (appointType !== 'new_patient' && appointType !== 'followup') {
-      // requestQuery = requestQuery.delete('appt_type');
-      requestQuery = requestQuery.append('treatment_plan_id', appointType);
-    }
-    this.scheduleSlotRequestQuery = requestQuery;
+    )
   }
 
   fetchAllSlotBuckets(): void {
@@ -236,8 +228,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   isSlotAvailable(slot: any): boolean {
     let statusToReturn: boolean = false;
-    if (slot.hasOwnProperty('status')) {
-      statusToReturn = slot.status !== 'unavailable';
+    if (slot.hasOwnProperty('online_booking')) {
+      statusToReturn = slot.online_booking === true;
     }
     return statusToReturn;
   }
@@ -246,12 +238,12 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.selectedSlot = null;
     this.slotBucketsLoaded = false;
     this.scheduleSlotsLoaded = false;
-    this.scheduleSlots = null;
+    // this.scheduleSlots = null;
 
-    let requestParams: string = customizedQueryParams ? customizedQueryParams : decodeURI(this.scheduleSlotRequestQuery.toString());
+    let requestParams: string = customizedQueryParams ? customizedQueryParams : `date=${this.selectedDate}`;
 
     this.allSubscriptions.push(
-      this.appointmentService.getSlotBuckets(slot, requestParams).subscribe(
+      this.appointmentService.getSlotTreatmentPlanBuckets(slot, requestParams).subscribe(
         (successResponse) => {
           this.slotBucketsLoaded = true;
           let bucketsResponse: any[] = successResponse.data;
@@ -284,7 +276,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
       if (this.slotBasedRecordsCount[whichSlot.id] < totalRecordCount) {
         let currentPage: number = meta.page_no;
         let nextPage: number = currentPage + 1;
-        let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString()) + `&page_no=${nextPage}`;
+        let requestParams: string = `date=${this.selectedDate}` + `&page_no=${nextPage}`;
         this.fetchSlotBuckets(whichSlot, requestParams);
       }
     }
@@ -319,6 +311,76 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  // getClinicSchedules(): void {
+  //   this.selectedSlot = null;
+  //   this.scheduleLoaded = false;
+
+  //   this.slotBucketsLoaded = false;
+  //   this.scheduleSlotsLoaded = false;
+  //   this.scheduleSlots = null;
+
+  //   this.allSubscriptions.push(
+  //     this.doctorService.fetchClinicSchedules(this.clinicId, this.doctorId).subscribe(
+  //       (successResponse: any[]) => {
+  //         this.scheduleLoaded = true;
+  //         if (successResponse.length > 0) {
+  //           var firstSchedule = successResponse.shift();
+  //           this.setSchedule(firstSchedule);
+  //           this.getScheduleSlots();
+  //         }
+  //       },
+  //       (errorResponse) => {
+  //         this.scheduleLoaded = true;
+  //       },
+  //     )
+  //   )
+  // }
+
+  // getScheduleSlots(): void {
+  //   this.selectedSlot = null;
+  //   // this.buckets = this.scheduleSlots = [];
+  //   this.buckets = [];
+  //   this.scheduleSlots = null;
+  //   this.slotBasedRecordsCount = null;
+  //   this.scheduleSlotsLoaded = false;
+
+  //   this.slotBucketsLoaded = false;
+
+  //   if (this.schedule !== null && typeof this.schedule !== 'undefined') {
+  //     this.buckets = [];
+  //     this.prepareScheduleSlotRequestQuery();
+  //     let requestParams: string = decodeURI(this.scheduleSlotRequestQuery.toString());
+
+  //     this.allSubscriptions.push(
+  //       this.appointmentService.fetchAppointmentSlots(this.schedule.id, requestParams).subscribe(
+  //         (successResponse) => {
+  //           this.scheduleSlotsLoaded = true;
+  //           this.scheduleSlots = successResponse;
+  //           this.serverRespondedForSlotListing = true;
+  //           this.fetchAllSlotBuckets();
+  //         },
+  //         (errorResponse) => {
+  //           this.serverRespondedForSlotListing = true;
+  //           this.scheduleSlotsLoaded = true;
+  //         }
+  //       )
+  //     )
+  //   }
+  // }
+
+  // prepareScheduleSlotRequestQuery(): void {
+  //   let appointType: string = this.treatmentPlansSelectControl.value;
+  //   let requestQuery: HttpParams = new HttpParams()
+  //     .set('date', this.selectedDate)
+  //     .set('appt_type', appointType);
+  //   if (appointType !== 'new_patient' && appointType !== 'followup') {
+  //     // requestQuery = requestQuery.delete('appt_type');
+  //     requestQuery = requestQuery.append('treatment_plan_id', appointType);
+  //   }
+  //   this.scheduleSlotRequestQuery = requestQuery;
+  // }
+
   getStartTime(time: string): string {
     let dateTimeString: string = `${this.selectedDate} ${time}`;
     return moment(dateTimeString).format('h:mm a');
@@ -327,19 +389,21 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   onSlotSelect(bucket: any): void {
     this.selectedSlot = bucket;
     localStorage.setItem('cc_selected_slot', JSON.stringify(bucket));
+    this.parseAndSetSlotTreatmentPlan(bucket);
   }
 
   onAppointmentDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.cancelExistingSubscriptions();
     this.selectedDate = moment(this.appointmentDateSelectControl.value).format('YYYY-MM-DD');
-    this.getClinicSchedules();
-    this.saveSelectedDateLocally();
+    // this.getClinicSchedules();
+    this.fetchSlotTreatmentPlans();
   }
 
   onVisitTypeChange(): void {
     this.cancelExistingSubscriptions();
+    this.fetchSlotTreatmentPlans();
+    // this.getClinicSchedules();
     this.saveSelectedVisitTypeLocally();
-    this.getClinicSchedules();
   }
 
   onProceedClick(): void {
@@ -348,10 +412,10 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   }
 
   saveSelectedVisitTypeLocally(): void {
-    let visitType: any = this.searchVisitTypeById(this.visitTypeSelectControl.value);
+    let visitType: any = this.searchVisitTypeById(this.treatmentPlansSelectControl.value);
     localStorage.setItem('cc_visit_type_title', visitType.title);
     // localStorage.setItem('cc_appointment_type', JSON.stringify(visitType.data));
-    localStorage.setItem('cc_appointment_type_key', this.visitTypeSelectControl.value);
+    localStorage.setItem('cc_appointment_type_key', this.treatmentPlansSelectControl.value);
   }
 
   isFormValid(): boolean {
@@ -360,8 +424,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   searchVisitTypeById(searchId: any): any {
     let searchResult: any = {};
-    for (let i: number = 0; i < this.visitTypes.length; i++) {
-      let visitType: any = this.visitTypes[i];
+    for (let i: number = 0; i < this.treatmentPlans.length; i++) {
+      let visitType: any = this.treatmentPlans[i];
       if (visitType.id == searchId) {
         searchResult.title = visitType.generic_treatment_plan.title;
         searchResult.data = visitType;
@@ -396,6 +460,16 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.allSubscriptions.map((subscription: Subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  parseAndSetSlotTreatmentPlan(bucket: any): void {
+    let slotTreatmentPlans: any[] = this.scheduleSlots;
+    let bucketId: string = bucket.id;
+    let slotTreatmentPlanId: number = +bucketId.split("-").shift();
+    var selectedSlotTreatmentPlan = slotTreatmentPlans.find((item) => { return item.id === slotTreatmentPlanId });
+    if (selectedSlotTreatmentPlan) {
+      this.setSlotTreatmentPlan(selectedSlotTreatmentPlan);
+    }
   }
 
 }
