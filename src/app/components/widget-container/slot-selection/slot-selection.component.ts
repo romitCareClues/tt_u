@@ -164,7 +164,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   fetchPhysicianTreatmentPlans(): void {
     this.selectedSlot = null;
-    let requestParams: string = `facility_id=${this.clinicId}&expand=generic_treatment_plan`;
+    let requestParams: string = `facility_id=${this.clinicId}&expand=generic_treatment_plan&order[featured]=desc&order[title]=asc`;
 
     this.allSubscriptions.push(
       this.appointmentService.fetchAppointmentVisitTypes(this.doctorId, requestParams).subscribe(
