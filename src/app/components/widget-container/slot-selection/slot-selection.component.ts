@@ -198,7 +198,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
     this.buckets = [];
     let treatmentPlanId: number = this.treatmentPlansSelectControl.value;
-    let requestParams: string = `date=${this.selectedDate}&physician_id=${this.doctorId}`;
+    let requestParams: string = `date=${this.selectedDate}&physician_id=${this.doctorId}&expand=slot`;
 
     this.allSubscriptions.push(
       this.appointmentService.fetchSlotTreatmentPlans(treatmentPlanId, requestParams).subscribe(
@@ -206,8 +206,11 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
           this.scheduleSlotsLoaded = true;
           this.serverRespondedForSlotListing = true;
           if (successResponse.length > 0) {
-            this.scheduleSlots = successResponse;
-            this.fetchAllSlotBuckets();
+            let availableSlots: any[] = this.appointmentService.getAvailableSlotTreatmentPlans(successResponse);
+            if (availableSlots.length > 0) {
+              this.scheduleSlots = availableSlots;
+              this.fetchAllSlotBuckets();
+            }
           }
         },
         (errorResponse) => {
