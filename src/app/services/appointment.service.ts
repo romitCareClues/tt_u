@@ -60,4 +60,14 @@ export class AppointmentService {
     let isPublic: boolean = true;
     return this.apiService.get(endPoint, isPublic);
   }
+
+  getAvailableSlotTreatmentPlans(slotTreatmentPlans: any[]): any[] {
+    return slotTreatmentPlans.filter((item) => {
+      let status: boolean = false
+      if (item.hasOwnProperty('slot')) {
+        status = item.slot.status === "available";
+      }
+      return status;
+    });
+  }
 }

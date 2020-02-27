@@ -60,6 +60,8 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
   slotTreatmentPlan: any = null;
 
+  displayNoSlotMessage: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -132,6 +134,10 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     localStorage.setItem('cc_slot_treatment_plan', JSON.stringify(data));
   }
 
+  setDisplayNoSlotMessage(message: any): void {
+    this.displayNoSlotMessage = message;
+  }
+
   extractAndSetRouteParams(): void {
     this.clinicId = +localStorage.getItem('cc_clinic_id');
     this.clinicSlug = this.route.snapshot.paramMap.get('clinicSlug');
@@ -198,7 +204,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
 
     this.buckets = [];
     let treatmentPlanId: number = this.treatmentPlansSelectControl.value;
-    let requestParams: string = `date=${this.selectedDate}&physician_id=${this.doctorId}`;
+    let requestParams: string = `date=${this.selectedDate}&physician_id=${this.doctorId}&expand=slot`;
 
     this.allSubscriptions.push(
       this.appointmentService.fetchSlotTreatmentPlans(treatmentPlanId, requestParams).subscribe(
@@ -206,8 +212,17 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
           this.scheduleSlotsLoaded = true;
           this.serverRespondedForSlotListing = true;
           if (successResponse.length > 0) {
-            this.scheduleSlots = successResponse;
-            this.fetchAllSlotBuckets();
+            let availableSlots: any[] = this.appointmentService.getAvailableSlotTreatmentPlans(successResponse);
+            if (availableSlots.length > 0) {
+              this.scheduleSlots = availableSlots;
+              this.fetchAllSlotBuckets();
+            }
+            else {
+              this.setDisplayNoSlotMessage(true);
+            }
+          }
+          else {
+            this.setDisplayNoSlotMessage(true);
           }
         },
         (errorResponse) => {
@@ -390,13 +405,15 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.selectedSlot = bucket;
     localStorage.setItem('cc_selected_slot', JSON.stringify(bucket));
     this.parseAndSetSlotTreatmentPlan(bucket);
+    this.setDisplayNoSlotMessage(false);
   }
 
   onAppointmentDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.cancelExistingSubscriptions();
     this.selectedDate = moment(this.appointmentDateSelectControl.value).format('YYYY-MM-DD');
-    // this.getClinicSchedules();
+    this.saveSelectedDateLocally();
     this.fetchSlotTreatmentPlans();
+    this.setDisplayNoSlotMessage(false);
   }
 
   onVisitTypeChange(): void {
@@ -404,6 +421,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
     this.fetchSlotTreatmentPlans();
     // this.getClinicSchedules();
     this.saveSelectedVisitTypeLocally();
+    this.setDisplayNoSlotMessage(false);
   }
 
   onProceedClick(): void {
