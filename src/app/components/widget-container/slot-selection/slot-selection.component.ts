@@ -395,7 +395,7 @@ export class SlotSelectionComponent implements OnInit, OnDestroy {
   onAppointmentDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.cancelExistingSubscriptions();
     this.selectedDate = moment(this.appointmentDateSelectControl.value).format('YYYY-MM-DD');
-    // this.getClinicSchedules();
+    this.saveSelectedDateLocally();
     this.fetchSlotTreatmentPlans();
   }
 
