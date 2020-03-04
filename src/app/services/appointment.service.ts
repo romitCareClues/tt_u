@@ -48,4 +48,26 @@ export class AppointmentService {
     }
     return parsedMessage;
   }
+
+  fetchSlotTreatmentPlans(treatmentPlanId: number, requestQuery: string): Observable<any> {
+    let endPoint: string = `treatment_plans/${treatmentPlanId}/slot_treatment_plans?${requestQuery}`;
+    let isPublic: boolean = true;
+    return this.apiService.get(endPoint, isPublic).pipe(map((response) => response.data));
+  }
+
+  getSlotTreatmentPlanBuckets(slot: any, requestParams: string): Observable<any> {
+    let endPoint: string = `slot_treatment_plans/${slot.id}/buckets?${requestParams}`;
+    let isPublic: boolean = true;
+    return this.apiService.get(endPoint, isPublic);
+  }
+
+  getAvailableSlotTreatmentPlans(slotTreatmentPlans: any[]): any[] {
+    return slotTreatmentPlans.filter((item) => {
+      let status: boolean = false
+      if (item.hasOwnProperty('slot')) {
+        status = item.slot.status === "available";
+      }
+      return status;
+    });
+  }
 }
