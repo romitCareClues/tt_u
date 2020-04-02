@@ -98,6 +98,7 @@ export class WidgetContainerComponent implements OnInit, OnDestroy {
   setClinicDetailsLocally(data: any): void {
     localStorage.setItem('cc_clinic_id', data.id.toString());
     localStorage.setItem('cc_clinic_slug', this.clinicSlug);
+    localStorage.setItem('cc_clinic_city', data.city);
   }
 
   redirect(calledForPageUrl: string): void {
