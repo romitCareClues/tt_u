@@ -3,11 +3,13 @@ import { ENUM_CONFIGURATIONS } from '../../../../configurations';
 import { LABEL_TEXTS } from '../../../../app/template-data';
 import { FILE_PATHS } from '../../../../configurations';
 import { Router } from '@angular/router';
+import { DoctorService } from '../../../services/doctor.service';
 
 @Component({
   selector: 'app-doctor-card',
   templateUrl: './doctor-card.component.html',
-  styleUrls: ['./doctor-card.component.css']
+  styleUrls: ['./doctor-card.component.css'],
+  providers: [DoctorService]
 })
 export class DoctorCardComponent implements OnInit {
   @Input() doctor;
@@ -32,7 +34,7 @@ export class DoctorCardComponent implements OnInit {
   callToBookFormDisplayStatus: boolean;
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private doctorService: DoctorService) {
     this.displayLabel = LABEL_TEXTS.doctor_card;
     this.doctorCardConfigurations = ENUM_CONFIGURATIONS.doctor_card;
     this.filePaths = FILE_PATHS;
@@ -159,6 +161,15 @@ export class DoctorCardComponent implements OnInit {
     // let clinicId: number = +localStorage.getItem('cc_clinic_id');
     let clinicSlug: string = localStorage.getItem('cc_clinic_slug');
     this.router.navigate(['/slot-selection', clinicSlug, this.doctor.uri], { queryParams: { referer: '_doctor_card' } });
+  }
+
+  onConsultNowClick(): void {
+    this.redirectToDoctorPublicProfile();
+  }
+
+  redirectToDoctorPublicProfile(): void {
+    let publicUrl: string = this.doctorService.getDoctorPublicProfileUrl(this.doctor);
+    window.location.href = publicUrl;
   }
 
 }

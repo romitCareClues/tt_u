@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './common/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment as ENV } from '../../environments/environment';
 
 // @Injectable({
 //   providedIn: 'root'
@@ -45,6 +46,14 @@ export class DoctorService {
     else {
       return true;
     }
+  }
+
+  getDoctorPublicProfileUrl(doctor: any): string {
+    let clinicId: number = +localStorage.getItem('cc_clinic_id');
+    let clinicCity: string = localStorage.getItem('cc_clinic_city');
+    let doctorUri: string = doctor.uri;
+    let publicProfileUrl: string = `${ENV.website_base_url}/${clinicCity}/doctors/specialist/${doctorUri}?clinic_id=${clinicId}`;
+    return publicProfileUrl;
   }
 
 }
